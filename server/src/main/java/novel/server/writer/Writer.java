@@ -1,6 +1,7 @@
-package novel.server.domain.writer;
+package novel.server.writer;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.Getter;
@@ -19,10 +20,10 @@ public class Writer {
     private Long id;
 
     @Column(length = 30)
-    @NotEmpty
+    @NotBlank
     private String penName;
     @Column(length = 100)
-    @NotEmpty
+    @NotBlank
     private String password;
     private LocalDateTime createdAt;
 

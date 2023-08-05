@@ -1,4 +1,4 @@
-package novel.server;
+package novel.server.global;
 
 public class WebConfig {
 }

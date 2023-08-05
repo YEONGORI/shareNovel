@@ -1,4 +1,4 @@
-package novel.server.web.writer.auth;
+package novel.server.writer.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

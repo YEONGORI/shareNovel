@@ -1,8 +1,8 @@
-package novel.server.web.writer.auth;
+package novel.server.writer.auth;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import novel.server.domain.writer.Writer;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,10 +20,15 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
-    private final int EXPIRATION_MILLISECONDS = 1000 * 60 * 30;
+    private static final int EXPIRATION_MILLISECONDS = 1000 * 60 * 30;
     @Value("${jwt.secret}")
     private String secretKey;
-    private final byte[] key = Base64.getDecoder().decode(secretKey);
+    private byte[] key;
+
+    @PostConstruct
+    public void init() {
+        this.key = Base64.getDecoder().decode(secretKey);
+    }
 
     public TokenInfo createToken(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
@@ -51,7 +56,7 @@ public class JwtTokenProvider {
         if (auth == null) {
             throw new RuntimeException("잘못된 토큰입니다.");
         }
-        List<GrantedAuthority> authorities = Arrays.stream(auth.toString().split(","))
+        List<GrantedAuthority> authorities = Arrays.stream(auth.split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
@@ -64,21 +69,21 @@ public class JwtTokenProvider {
             getClaims(token);
             return true;
         } catch (Exception e) {
-            if (e instanceof SecurityException) { // Invalid JWT Token
-
-            }
-            if (e instanceof MalformedJwtException) { // Invalid JWT Token
-
-            }
-            if (e instanceof ExpiredJwtException) { // Expired JWT Token
-
-            }
-            if (e instanceof UnsupportedJwtException) { // Unsupported JWT Token
-
-            }
-            if (e instanceof IllegalArgumentException) { // JWT claims string is empty
-
-            }
+//            if (e instanceof SecurityException) { // Invalid JWT Token
+//
+//            }
+//            if (e instanceof MalformedJwtException) { // Invalid JWT Token
+//
+//            }
+//            if (e instanceof ExpiredJwtException) { // Expired JWT Token
+//
+//            }
+//            if (e instanceof UnsupportedJwtException) { // Unsupported JWT Token
+//
+//            }
+//            if (e instanceof IllegalArgumentException) { // JWT claims string is empty
+//
+//            }
             return false;
         }
     }

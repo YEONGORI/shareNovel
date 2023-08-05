@@ -1,13 +1,14 @@
-package novel.server.web.writer.dto;
+package novel.server.writer.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import novel.server.domain.writer.Writer;
+import novel.server.writer.Writer;
 import org.hibernate.validator.constraints.Length;
 
 @Data
 @NoArgsConstructor
-public class WriterRegisterDto {
+@AllArgsConstructor
+public class WriterDefaultRegisterDto {
     @NotBlank
     @Length(max = 30)
     private String penName;

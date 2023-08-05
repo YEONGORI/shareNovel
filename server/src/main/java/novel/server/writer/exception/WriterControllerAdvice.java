@@ -1,17 +1,19 @@
-package novel.server.web.writer.exception;
+package novel.server.writer.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import novel.server.ResultCode;
-import novel.server.domain.writer.exception.WriterAlreadyExistsException;
-import novel.server.web.writer.WriterController;
+import novel.server.global.ResultCode;
+import novel.server.writer.WriterController;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
+import javax.naming.AuthenticationException;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,6 +49,13 @@ public class WriterControllerAdvice {
     protected ErrorResult writerExHandle(WriterAlreadyExistsException e) {
         log.error("Writer Exception Handler", e);
         return new ErrorResult(ResultCode.ERROR, singletonList(e.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler({AuthenticationException.class, BadCredentialsException.class})
+    public ErrorResult handleAuthenticationException(AuthenticationException e) {
+        log.error("Authentication Exception Handler = ", e);
+        return new ErrorResult(ResultCode.ERROR, singletonList("아이디 또는 비밀번호를 확인해주세요"));
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
