@@ -42,4 +42,5 @@ public class WriterController {
     private <T> ResponseEntity<T> makeReponseEntity(T responseBody, HttpStatus statusCode) {
         return new ResponseEntity<>(responseBody, statusCode);
     }
+
 }

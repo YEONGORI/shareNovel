@@ -36,6 +36,9 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    testImplementation 'com.navercorp.fixturemonkey:fixture-monkey-starter:0.6.3'
+
 }
 
 ext['spring-security.version']='6.1.2'

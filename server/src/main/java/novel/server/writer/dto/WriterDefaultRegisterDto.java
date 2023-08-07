@@ -2,6 +2,7 @@ package novel.server.writer.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import novel.server.novel.Novel;
 import novel.server.writer.Writer;
 import org.hibernate.validator.constraints.Length;
 
@@ -18,6 +19,10 @@ public class WriterDefaultRegisterDto {
     private String password;
 
     public Writer toEntity() {
-        return new Writer(penName, password);
+        return Writer.builder()
+                .penName(penName)
+                .password(password)
+                .build();
+
     }
 }

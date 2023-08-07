@@ -29,7 +29,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(c -> c
                         .requestMatchers("/api/writer/register", "/api/writer/login").anonymous()
-                        .requestMatchers("/api/writer/**").hasRole("ROLE_USER")
+                        .requestMatchers("/api/writer/**").hasRole("WRITER")
                         .anyRequest().permitAll())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 //                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);

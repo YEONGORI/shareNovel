@@ -2,17 +2,19 @@ package novel.server.writer;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
+import novel.server.writernovel.WriterNovel;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "writer", uniqueConstraints = {@UniqueConstraint(columnNames = "penName")})
 public class Writer {
     @Id
@@ -27,9 +29,12 @@ public class Writer {
     private String password;
     private LocalDateTime createdAt;
 
-    public Writer(String penName, String password) {
-        this.penName = penName;
-        this.password = password;
-        this.createdAt = LocalDateTime.now();
-    }
+    @OneToMany(mappedBy = "writer")
+    private List<WriterNovel> participations = new ArrayList<>();
+
+//    public Writer(String penName, String password) {
+//        this.penName = penName;
+//        this.password = password;
+//        this.createdAt = LocalDateTime.now();
+//    }
 }
