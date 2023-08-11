@@ -1,19 +1,22 @@
 package novel.server.novel.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import novel.server.novel.Novel;
 import org.hibernate.validator.constraints.Length;
 
 @Getter
 @Setter
+@Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class NovelRegisterDto {
     @NotBlank
     @Length(max = 100)
     private String title;
     @NotBlank
-    @Length(max = 1000)
+    @Length(max = 500)
     private String plot;
     @NotBlank
     @Length(max = 500)

@@ -16,6 +16,7 @@ import java.util.List;
 @Setter
 @Builder
 @Entity
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Novel {

@@ -37,7 +37,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    testImplementation 'com.navercorp.fixturemonkey:fixture-monkey-starter:0.6.3'
+    testImplementation 'org.jeasy:easy-random-core:5.0.0'
+    testImplementation 'org.jeasy:easy-random-bean-validation:5.0.0'
+
 
 }
 

@@ -30,7 +30,7 @@ public class Writer {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "writer")
-    private List<WriterNovel> participations = new ArrayList<>();
+    private List<WriterNovel> writerNovels = new ArrayList<>();
 
 //    public Writer(String penName, String password) {
 //        this.penName = penName;

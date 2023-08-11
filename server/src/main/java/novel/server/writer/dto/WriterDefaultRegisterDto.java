@@ -7,6 +7,7 @@ import novel.server.writer.Writer;
 import org.hibernate.validator.constraints.Length;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class WriterDefaultRegisterDto {

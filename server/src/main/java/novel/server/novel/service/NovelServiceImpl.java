@@ -34,6 +34,7 @@ public class NovelServiceImpl implements NovelService {
                 .build();
 
         novel.getWriterNovels().add(writerNovel);
+        writer.getWriterNovels().add(writerNovel);
         writerNovelRepository.save(writerNovel);
     }
 }
