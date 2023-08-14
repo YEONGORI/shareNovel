@@ -3,14 +3,14 @@ package novel.server.writer;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import novel.server.member.Member;
+import novel.server.novelsection.NovelSection;
 import novel.server.writernovel.WriterNovel;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Setter
 @Entity
 @Builder
 @NoArgsConstructor
@@ -24,17 +24,14 @@ public class Writer {
     @Column(length = 30)
     @NotBlank
     private String penName;
-    @Column(length = 100)
-    @NotBlank
-    private String password;
-    private LocalDateTime createdAt;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @OneToMany(mappedBy = "writer")
     private List<WriterNovel> writerNovels = new ArrayList<>();
 
-//    public Writer(String penName, String password) {
-//        this.penName = penName;
-//        this.password = password;
-//        this.createdAt = LocalDateTime.now();
-//    }
+    @OneToMany(mappedBy = "writer")
+    private List<NovelSection> novelSections = new ArrayList<>();
 }

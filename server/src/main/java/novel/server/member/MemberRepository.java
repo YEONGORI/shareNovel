@@ -1,4 +1,4 @@
-package novel.server.novel;
+package novel.server.member;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface NovelRepository extends JpaRepository<Novel, Long> {
-    Optional<Novel> findNovelById(Long id);
+public interface MemberRepository extends JpaRepository<Member, Long> {
+    Optional<Member> findMemberByPenName(String penName);
 }

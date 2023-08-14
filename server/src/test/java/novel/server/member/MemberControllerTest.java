@@ -1,9 +1,11 @@
-
-package novel.server.writer;
+package novel.server.member;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import novel.server.writer.dto.WriterDefaultLoginDto;
-import novel.server.writer.dto.WriterDefaultRegisterDto;
+import novel.server.member.dto.MemberDefaultLoginDto;
+import novel.server.member.dto.MemberDefaultRegisterDto;
+import novel.server.writer.Writer;
+import novel.server.writer.WriterRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,20 +24,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
-class WriterControllerTest {
+class MemberControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
+    private WriterRepository writerRepository;
+    @Autowired
+    private MemberService memberService;
 
     @Test
     @DisplayName("회원 가입 요청")
     void register() throws Exception {
         // given
-        WriterDefaultRegisterDto registerDto = WriterMother.registerDto();
+        MemberDefaultRegisterDto registerDto = MemberMother.registerDto();
         // when
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/writer/register")
+                        .post("/api/member/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerDto)))
                 .andExpect(status().isCreated()); // then
@@ -45,18 +53,18 @@ class WriterControllerTest {
     @DisplayName("중복 회원 가입 요청")
     void dupRegister() throws Exception {
         // given
-        WriterDefaultRegisterDto registerDto = WriterMother.registerDto();
+        MemberDefaultRegisterDto registerDto = MemberMother.registerDto();
 
         // when
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/writer/register")
+                        .post("/api/member/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerDto)))
                 .andExpect(status().isCreated());
 
         // then
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/writer/register")
+                        .post("/api/member/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerDto)))
                 .andExpect(status().isConflict());
@@ -66,48 +74,69 @@ class WriterControllerTest {
     @DisplayName("회원 가입 요청 검증")
     void validateRegisterRequest() throws Exception {
         // given
-        WriterDefaultRegisterDto registerDto0 = WriterMother.registerDto();
-        WriterDefaultRegisterDto registerDto1 = WriterMother.registerDto();
-        registerDto1.setPenName(null);
-        registerDto1.setPassword(null);
-        WriterDefaultRegisterDto registerDto2 = WriterMother.registerDto();
-        registerDto2.setPassword("");
-        WriterDefaultRegisterDto registerDto3 = WriterMother.registerDto();
-        registerDto3.setPenName("");
-
+        MemberDefaultRegisterDto registerDto0 = MemberMother.registerDto();
+        MemberDefaultRegisterDto registerDto1 = MemberDefaultRegisterDto.builder()
+                .penName(null)
+                .password(null)
+                .build();
+        MemberDefaultRegisterDto registerDto2 = MemberDefaultRegisterDto.builder()
+                .penName("")
+                .password("password")
+                .build();
+        MemberDefaultRegisterDto registerDto3 = MemberDefaultRegisterDto.builder()
+                .penName("penName")
+                .password("")
+                .build();
 
         // when
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/writer/register")
+                        .post("/api/member/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerDto0)))
                 .andExpect(status().isCreated()); // then
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/writer/register")
+                        .post("/api/member/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerDto1)))
                 .andExpect(status().isBadRequest()); // then
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/writer/register")
+                        .post("/api/member/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerDto2)))
                 .andExpect(status().isBadRequest()); // then
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/writer/register")
+                        .post("/api/member/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerDto3)))
                 .andExpect(status().isBadRequest()); // then
     }
 
     @Test
+    @DisplayName("회원가입시 Member - Writer 1:1 양방향 매칭 검증")
+    void MemberWriterOneToOne() {
+        // given
+        MemberDefaultRegisterDto registerDto = MemberMother.registerDto();
+
+        // when
+        memberService.register(registerDto);
+        Member member = memberRepository.findMemberByPenName(registerDto.getPenName()).get();
+        Writer writer = writerRepository.findWriterByPenName(registerDto.getPenName()).get();
+
+        // then
+        Assertions.assertThat(member.getId()).isEqualTo(writer.getMember().getId());
+        Assertions.assertThat(writer.getId()).isEqualTo(member.getWriter().getId());
+        Assertions.assertThat(member).isEqualTo(writer.getMember());
+    }
+
+    @Test
     @DisplayName("로그인 요청")
     void login() throws Exception {
         // given
-        WriterDefaultRegisterDto registerDto = WriterMother.registerDto();
-        WriterDefaultLoginDto loginDto = WriterDefaultLoginDto.builder()
+        MemberDefaultRegisterDto registerDto = MemberMother.registerDto();
+        MemberDefaultLoginDto loginDto = MemberDefaultLoginDto.builder()
                 .penName(registerDto.getPenName())
                 .password(registerDto.getPassword())
                 .build();
@@ -116,12 +145,12 @@ class WriterControllerTest {
 
         // when
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/writer/register")
+                        .post("/api/member/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerDto)))
                 .andExpect(status().isCreated());
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/writer/login")
+                        .post("/api/member/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginDto)))
                 .andExpect(status().isAccepted()); // then
@@ -131,25 +160,30 @@ class WriterControllerTest {
     @DisplayName("인증되지 않은 로그인 요청")
     void loginNotAuthorized() throws Exception {
         // given
-        WriterDefaultRegisterDto registerDto = WriterMother.registerDto();
-        WriterDefaultLoginDto loginDto1 = WriterMother.loginDto();
-        loginDto1.setPenName(registerDto.getPenName());
-        WriterDefaultLoginDto loginDto2 = WriterMother.loginDto();
-        loginDto2.setPassword(registerDto.getPassword());
+        MemberDefaultRegisterDto registerDto = MemberMother.registerDto();
+        MemberDefaultLoginDto loginDto1 = MemberDefaultLoginDto.builder()
+                .penName(registerDto.getPenName())
+                .password("TEST")
+                .build();
+        MemberDefaultLoginDto loginDto2 = MemberDefaultLoginDto.builder()
+                .penName("TEST")
+                .password(registerDto.getPassword())
+                .build();
+
 
         // when
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/writer/register")
+                        .post("/api/member/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerDto)))
                 .andExpect(status().isCreated());
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/writer/login")
+                        .post("/api/member/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginDto1)))
                 .andExpect(status().isForbidden()); // then
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/writer/login")
+                        .post("/api/member/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginDto2)))
                 .andExpect(status().isForbidden()); // then
@@ -159,29 +193,30 @@ class WriterControllerTest {
     @DisplayName("로그인 요청 검증")
     void validateLoginRequest() throws Exception {
         // given
-        WriterDefaultLoginDto loginDto1 = WriterMother.loginDto();
-        loginDto1.setPenName("");
-        loginDto1.setPassword("");
-        WriterDefaultLoginDto loginDto2 = WriterMother.loginDto();
-        loginDto2.setPassword(null);
-        WriterDefaultLoginDto loginDto3 = WriterMother.loginDto();
-        loginDto3.setPenName(null);
+        MemberDefaultLoginDto loginDto1 = MemberDefaultLoginDto.builder()
+                .penName("").password("").build();
+
+        MemberDefaultLoginDto loginDto2 = MemberDefaultLoginDto.builder()
+                .penName(null).password("TEST").build();
+
+        MemberDefaultLoginDto loginDto3 = MemberDefaultLoginDto.builder()
+                .penName("TEST").password(null).build();
 
         // when
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/writer/login")
+                        .post("/api/member/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginDto1)))
                 .andExpect(status().isBadRequest()); // then
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/writer/login")
+                        .post("/api/member/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginDto2)))
                 .andExpect(status().isBadRequest()); // then
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/writer/login")
+                        .post("/api/member/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginDto3)))
                 .andExpect(status().isBadRequest()); // then

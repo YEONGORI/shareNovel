@@ -23,23 +23,12 @@ public class NovelController {
     ) {
         novelService.register(novelRegisterDto);
         response.setHeader("Location", "/register");
-        return makeReponseEntity(novelRegisterDto, HttpStatus.CREATED);
+        return makeResponseEntity(novelRegisterDto, HttpStatus.CREATED);
     }
 
-//    @GetMapping("/register")
 
-    private <T> ResponseEntity<T> makeReponseEntity(T responseBody, HttpStatus statusCode) {
+    private <T> ResponseEntity<T> makeResponseEntity(T responseBody, HttpStatus statusCode) {
         return new ResponseEntity<>(responseBody, statusCode);
     }
 
 }
-
-//    @PostMapping("/register")
-//    public ResponseEntity<?> register(
-//            @Validated @RequestBody WriterDefaultRegisterDto writerDefaultRegisterDto,
-//            HttpServletResponse response
-//    ) {
-//        String resultMsg = writerService.register(writerDefaultRegisterDto);
-//        response.setHeader("Location", "/login");
-//        return makeReponseEntity(resultMsg, HttpStatus.CREATED);
-//    }

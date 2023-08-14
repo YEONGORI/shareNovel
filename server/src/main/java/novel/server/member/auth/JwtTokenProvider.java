@@ -1,8 +1,11 @@
-package novel.server.writer.auth;
+package novel.server.member.auth;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import novel.server.member.dto.CustomUser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,6 +45,7 @@ public class JwtTokenProvider {
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim("auth", authorities)
+                .claim("memberId", ((CustomUser) authentication.getPrincipal()).getMemberId())
                 .setIssuedAt(currentTime)
                 .setExpiration(expirationTime)
                 .signWith(Keys.hmacShaKeyFor(key), SignatureAlgorithm.HS256)
@@ -53,14 +57,16 @@ public class JwtTokenProvider {
     public Authentication getAuthentication(String token) {
         Claims claims = getClaims(token);
         String auth = claims.get("auth").toString();
-        if (auth == null) {
+        String memberId = claims.get("memberId").toString();
+
+        if (auth == null || memberId == null) {
             throw new RuntimeException("잘못된 토큰입니다.");
         }
         List<GrantedAuthority> authorities = Arrays.stream(auth.split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
+        UserDetails principal = new CustomUser(Long.parseLong(memberId), claims.getSubject(), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 

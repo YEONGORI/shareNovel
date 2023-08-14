@@ -1,17 +1,14 @@
-package novel.server.writer.dto;
+package novel.server.member.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
-@Data
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class WriterDefaultLoginDto {
+public class MemberDefaultLoginDto {
     @NotBlank
     @Length(max = 30)
     private String penName;

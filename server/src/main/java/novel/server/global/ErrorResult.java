@@ -1,8 +1,7 @@
-package novel.server.writer.exception;
+package novel.server.global;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import novel.server.global.ResultCode;
 
 import java.util.List;
 

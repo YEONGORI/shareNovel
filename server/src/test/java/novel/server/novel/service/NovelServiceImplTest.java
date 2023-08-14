@@ -1,16 +1,17 @@
 package novel.server.novel.service;
 
+import novel.server.member.dto.MemberDefaultRegisterDto;
 import novel.server.novel.Novel;
 import novel.server.novel.NovelMother;
 import novel.server.novel.NovelRepository;
 import novel.server.novel.dto.NovelRegisterDto;
+import novel.server.member.Member;
+import novel.server.member.MemberMother;
+import novel.server.member.MemberRepository;
 import novel.server.writer.Writer;
-import novel.server.writer.WriterMother;
 import novel.server.writer.WriterRepository;
-import novel.server.writer.dto.WriterDefaultRegisterDto;
 import novel.server.writernovel.WriterNovel;
 import novel.server.writernovel.WriterNovelRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,55 +31,73 @@ class NovelServiceImplTest {
     @Autowired
     WriterRepository writerRepository;
     @Autowired
-    WriterNovelRepository writerNovelRepository;
+    MemberRepository memberRepository;
+    @Autowired
+    WriterNovelRepository writerNovelReposyitory;
 
     @Test
     @DisplayName("소설 등록")
     void register() {
         // given
-        WriterDefaultRegisterDto writerRegisterDto = WriterMother.registerDto();
-        Writer writer = writerRegisterDto.toEntity();
-        writerRepository.save(writer);
+        MemberDefaultRegisterDto memberRegisterDto = MemberMother.registerDto();
+        Member member = memberRegisterDto.toEntity();
+        Member savedMember = memberRepository.save(member);
 
         NovelRegisterDto registerDto = NovelMother.registerDto();
         Novel novel = registerDto.toEntity();
         novelRepository.save(novel);
+
+        Writer writer = createWriter(member);
+        savedMember.setWriter(writer);
+        writerRepository.save(writer);
 
         // when
         WriterNovel writerNovel = WriterNovel.builder()
                 .writer(writer)
                 .novel(novel)
                 .build();
-        writerNovelRepository.save(writerNovel);
+        writerNovelReposyitory.save(writerNovel);
 
         // then
-        Optional<WriterNovel> byNovel = writerNovelRepository.findByNovel(novel);
-        Optional<WriterNovel> byWriter = writerNovelRepository.findByWriter(writer);
-        assertThat(byNovel.get()).isEqualTo(byWriter.get());
+        Optional<WriterNovel> byNovel = writerNovelReposyitory.findByNovel(novel);
+        Optional<WriterNovel> byMember = writerNovelReposyitory.findByWriter(writer);
+        assertThat(byNovel.get()).isEqualTo(byMember.get());
+    }
+
+    private static Writer createWriter(Member member) {
+        return Writer.builder()
+                .penName(member.getPenName())
+                .member(member)
+                .build();
     }
 
     @Test
     @DisplayName("소설 - 작가 매핑 테스트")
     void register_mapping() {
         // given
-        WriterDefaultRegisterDto writerRegisterDto = WriterMother.registerDto();
-        Writer writer = writerRegisterDto.toEntity();
-        writerRepository.save(writer);
+        MemberDefaultRegisterDto memberRegisterDto = MemberMother.registerDto();
+        Member member = memberRepository.save(memberRegisterDto.toEntity());
 
-        NovelRegisterDto registerDto = NovelMother.registerDto();
-        Novel novel = registerDto.toEntity();
-        novelRepository.save(novel);
+        NovelRegisterDto registerDto0 = NovelMother.registerDto();
+        NovelRegisterDto registerDto1 = NovelMother.registerDto();
+        Novel novel = novelRepository.save(registerDto0.toEntity());
+        novelRepository.save(registerDto1.toEntity());
+
+        Writer writer = createWriter(member);
+        member.setWriter(writer);
+        writerRepository.save(writer);
 
         // when
         WriterNovel writerNovel = WriterNovel.builder()
                 .writer(writer)
                 .novel(novel)
                 .build();
-        writerNovelRepository.save(writerNovel);
+        writerNovelReposyitory.save(writerNovel);
 
         // then
-        Optional<WriterNovel> byNovel = writerNovelRepository.findByNovel(novel);
-        Optional<WriterNovel> byWriter = writerNovelRepository.findByWriter(writer);
-        assertThat(byNovel.get()).isEqualTo(byWriter.get());
+        WriterNovel byNovel = writerNovelReposyitory.findByNovel(novel).get();
+        WriterNovel byMember = writerNovelReposyitory.findByWriter(writer).get();
+        assertThat(byNovel.getNovel().getId()).isEqualTo(novel.getId());
+        assertThat(byMember.getWriter().getId()).isEqualTo(writer.getId());
     }
 }

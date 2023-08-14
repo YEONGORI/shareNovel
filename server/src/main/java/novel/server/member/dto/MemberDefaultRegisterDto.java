@@ -1,16 +1,15 @@
-package novel.server.writer.dto;
+package novel.server.member.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import novel.server.novel.Novel;
-import novel.server.writer.Writer;
+import novel.server.member.Member;
 import org.hibernate.validator.constraints.Length;
 
-@Data
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class WriterDefaultRegisterDto {
+public class MemberDefaultRegisterDto {
     @NotBlank
     @Length(max = 30)
     private String penName;
@@ -19,8 +18,8 @@ public class WriterDefaultRegisterDto {
     @Length(max = 100)
     private String password;
 
-    public Writer toEntity() {
-        return Writer.builder()
+    public Member toEntity() {
+        return Member.builder()
                 .penName(penName)
                 .password(password)
                 .build();

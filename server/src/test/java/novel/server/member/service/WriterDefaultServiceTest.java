@@ -1,11 +1,11 @@
-package novel.server.writer.service;
+package novel.server.member.service;
 
-import novel.server.writer.Writer;
-import novel.server.writer.WriterMother;
-import novel.server.writer.WriterRepository;
-import novel.server.writer.auth.JwtTokenProvider;
-import novel.server.writer.dto.WriterDefaultLoginDto;
-import novel.server.writer.dto.WriterDefaultRegisterDto;
+import novel.server.member.Member;
+import novel.server.member.MemberRepository;
+import novel.server.member.auth.JwtTokenProvider;
+import novel.server.member.dto.MemberDefaultLoginDto;
+import novel.server.member.dto.MemberDefaultRegisterDto;
+import novel.server.member.MemberMother;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +23,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Transactional
 @SpringBootTest
-class WriterDefaultServiceTest {
+class MemberDefaultServiceTest {
     @Autowired
-    WriterRepository writerRepository;
+    MemberRepository memberRepository;
     @Autowired
     AuthenticationManagerBuilder authenticationManagerBuilder;
     @Autowired
@@ -35,26 +35,26 @@ class WriterDefaultServiceTest {
     @DisplayName("회원 가입")
     void register() {
 
-        WriterDefaultRegisterDto registerDto = WriterMother.registerDto();
-        Writer writer = registerDto.toEntity();
-        writerRepository.save(writer);
+        MemberDefaultRegisterDto registerDto = MemberMother.registerDto();
+        Member member = registerDto.toEntity();
+        memberRepository.save(member);
 
-        Writer writer_ch = writerRepository.findWriterByPenName(writer.getPenName()).get();
-        assertThat(writer).isEqualTo(writer_ch);
+        Member member_ch = memberRepository.findMemberByPenName(member.getPenName()).get();
+        assertThat(member).isEqualTo(member_ch);
     }
 
     @Test
     @DisplayName("로그인")
     void login() {
         // given
-        WriterDefaultRegisterDto registerDto = WriterMother.registerDto();
-        Writer writer = registerDto.toEntity();
+        MemberDefaultRegisterDto registerDto = MemberMother.registerDto();
+        Member member = registerDto.toEntity();
 
-        WriterDefaultLoginDto loginDto = WriterDefaultLoginDto.builder()
-                .penName(writer.getPenName())
-                .password(writer.getPassword())
+        MemberDefaultLoginDto loginDto = MemberDefaultLoginDto.builder()
+                .penName(member.getPenName())
+                .password(member.getPassword())
                 .build();
-        writerRepository.save(writer);
+        memberRepository.save(member);
 
         // when
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getPenName(), loginDto.getPassword());
@@ -67,7 +67,7 @@ class WriterDefaultServiceTest {
     @Test
     @DisplayName("비인증 사용자 확인 [미등록 사용자]")
     void NotAuthorized1() {
-        WriterDefaultLoginDto loginDto = WriterMother.loginDto();
+        MemberDefaultLoginDto loginDto = MemberMother.loginDto();
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getPenName(), loginDto.getPassword());
         assertThrows(AuthenticationException.class,
                 () -> authenticationManagerBuilder.getObject().authenticate(authenticationToken));
@@ -76,22 +76,24 @@ class WriterDefaultServiceTest {
     @Test
     @DisplayName("비인증 사용자 확인 [필명, 비밀번호 불일치]")
     void NotAuthorized2() {
-        WriterDefaultRegisterDto registerDto = WriterMother.registerDto();
-        Writer writer = registerDto.toEntity();
-        writerRepository.save(writer);
+        MemberDefaultRegisterDto registerDto = MemberMother.registerDto();
+        Member member = registerDto.toEntity();
+        memberRepository.save(member);
 
+        MemberDefaultLoginDto loginDto0 = MemberDefaultLoginDto.builder()
+                .penName(member.getPenName())
+                .password(member.getPassword())
+                .build();
 
-        WriterDefaultLoginDto loginDto0 = WriterMother.loginDto();
-        loginDto0.setPenName(writer.getPenName());
-        loginDto0.setPassword(writer.getPassword());
+        MemberDefaultLoginDto loginDto1 = MemberDefaultLoginDto.builder()
+                .penName(member.getPenName())
+                .password("TEST")
+                .build();
 
-        WriterDefaultLoginDto loginDto1 = WriterMother.loginDto();
-        loginDto1.setPenName(writer.getPenName());
-
-        WriterDefaultLoginDto loginDto2 = WriterMother.loginDto();
-        loginDto2.setPassword(writer.getPassword());
-
-
+        MemberDefaultLoginDto loginDto2 = MemberDefaultLoginDto.builder()
+                .penName("TEST")
+                .password(member.getPassword())
+                .build();
 
         UsernamePasswordAuthenticationToken authenticationToken0 = new UsernamePasswordAuthenticationToken(loginDto0.getPenName(), loginDto0.getPassword());
         UsernamePasswordAuthenticationToken authenticationToken1 = new UsernamePasswordAuthenticationToken(loginDto1.getPenName(), loginDto1.getPassword());

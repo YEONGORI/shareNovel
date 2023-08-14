@@ -13,10 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Setter
 @Builder
 @Entity
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Novel {
@@ -49,7 +47,4 @@ public class Novel {
 
     @OneToMany(mappedBy = "novel")
     private List<WriterNovel> writerNovels = new ArrayList<>();
-
-    @OneToMany(mappedBy = "novel")
-    private List<Vote> votes = new ArrayList<>();
 }

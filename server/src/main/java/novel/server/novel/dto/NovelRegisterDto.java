@@ -6,7 +6,6 @@ import novel.server.novel.Novel;
 import org.hibernate.validator.constraints.Length;
 
 @Getter
-@Setter
 @Builder
 @ToString
 @NoArgsConstructor

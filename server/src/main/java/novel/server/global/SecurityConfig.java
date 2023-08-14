@@ -1,8 +1,7 @@
 package novel.server.global;
 
 import lombok.RequiredArgsConstructor;
-import novel.server.writer.auth.JwtAuthenticationFilter;
-import novel.server.writer.auth.JwtTokenProvider;
+import novel.server.member.auth.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,12 +27,10 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(c -> c
-                        .requestMatchers("/api/writer/register", "/api/writer/login").anonymous()
-                        .requestMatchers("/api/writer/**").hasRole("WRITER")
+//                        .requestMatchers("/api/member/register", "/api/member/login").anonymous()
+//                        .requestMatchers("/api/member/**").hasRole("WRITER")
                         .anyRequest().permitAll())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-//                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
-
 
         return http.build();
     }
