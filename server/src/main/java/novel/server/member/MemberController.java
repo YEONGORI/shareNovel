@@ -24,9 +24,9 @@ public class MemberController {
             @Validated @RequestBody MemberDefaultRegisterDto memberDefaultRegisterDto,
             HttpServletResponse response
     ) {
-        String resultMsg = memberService.register(memberDefaultRegisterDto);
+        memberService.register(memberDefaultRegisterDto);
         response.setHeader("Location", "/login");
-        return makeReponseEntity(resultMsg, HttpStatus.CREATED);
+        return makeReponseEntity("ok", HttpStatus.CREATED);
     }
 
     @PostMapping("/login")

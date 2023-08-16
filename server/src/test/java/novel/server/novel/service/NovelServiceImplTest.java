@@ -72,7 +72,7 @@ class NovelServiceImplTest {
     }
 
     @Test
-    @DisplayName("소설 - 작가 매핑 테스트")
+    @DisplayName("소설 - 작가 매핑 테스트 0")
     void register_mapping() {
         // given
         MemberDefaultRegisterDto memberRegisterDto = MemberMother.registerDto();

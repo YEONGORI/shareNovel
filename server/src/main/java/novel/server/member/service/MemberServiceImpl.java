@@ -17,6 +17,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -28,7 +31,7 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public String register(MemberDefaultRegisterDto registerDto) {
+    public Member register(MemberDefaultRegisterDto registerDto) {
         if (memberRepository.findMemberByPenName(registerDto.getPenName()).isPresent()) {
             throw new MemberAlreadyExistsException("사용중인 필명 입니다.");
         }
@@ -36,11 +39,13 @@ public class MemberServiceImpl implements MemberService {
         Writer savedWriter = Writer.builder()
                 .penName(registerDto.getPenName())
                 .member(savedMember)
+                .writerNovels(new ArrayList<>())
+                .novelSections(new ArrayList<>())
                 .build();
         writerRepository.save(savedWriter);
         savedMember.setWriter(savedWriter);
 
-        return "회원가입 완료";
+        return savedMember;
     }
 
     @Override

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface NovelService {
-    void register(NovelRegisterDto registerDto);
+    Novel register(NovelRegisterDto registerDto);
 }

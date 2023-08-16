@@ -5,6 +5,9 @@ import lombok.*;
 import novel.server.novel.Novel;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 @Getter
 @Builder
 @ToString
@@ -29,7 +32,7 @@ public class NovelRegisterDto {
     @NotBlank
     @Length(max = 200)
     private String event;
-
+    @Setter
     @NotBlank
     @Length(max = 30)
     private String penName;
@@ -42,6 +45,8 @@ public class NovelRegisterDto {
                 .characters(characters)
                 .background(background)
                 .event(event)
+                .novelSections(new ArrayList<>())
+                .writerNovels(new ArrayList<>())
                 .build();
     }
 }

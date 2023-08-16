@@ -2,6 +2,7 @@ package novel.server.member.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import novel.server.member.Member;
 import novel.server.member.MemberRepository;
 import novel.server.member.MemberService;
 import novel.server.member.auth.JwtTokenProvider;
@@ -27,12 +28,12 @@ public class MemberDefaultService implements MemberService {
      * @param registerDto
      * @return
      */
-    public String register(MemberDefaultRegisterDto registerDto) {
+    public Member register(MemberDefaultRegisterDto registerDto) {
         if (memberRepository.findMemberByPenName(registerDto.getPenName()).isPresent()) {
             throw new MemberAlreadyExistsException("사용중인 필명 입니다.");
         }
-        memberRepository.save(registerDto.toEntity());
-        return "회원가입이 완료되었습니다.";
+        Member member = memberRepository.save(registerDto.toEntity());
+        return member;
     }
 
 

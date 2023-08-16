@@ -9,6 +9,7 @@ import novel.server.writer.Writer;
 @Setter
 @Builder
 @Entity
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class WriterNovel {

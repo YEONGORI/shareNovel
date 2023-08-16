@@ -45,6 +45,6 @@ public class Novel {
     @OneToMany(mappedBy = "novel", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<NovelSection> novelSections = new ArrayList<>();
 
-    @OneToMany(mappedBy = "novel")
+    @OneToMany(mappedBy = "novel", fetch = FetchType.LAZY)
     private List<WriterNovel> writerNovels = new ArrayList<>();
 }

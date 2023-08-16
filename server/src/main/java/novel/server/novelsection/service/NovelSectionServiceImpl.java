@@ -36,12 +36,12 @@ public class NovelSectionServiceImpl implements NovelSectionService {
 
         Writer writer = member.getWriter();
 
-        NovelSection section = createDTO.toEntity();
-        section.setNovel(novel);
-        section.setWriter(writer);
-        writer.getNovelSections().add(section);
+        NovelSection novelSection = createDTO.toEntity();
+        novelSection.setNovel(novel);
+        novelSection.setWriter(writer);
+        writer.getNovelSections().add(novelSection);
 
-        return novelSectionRepository.save(section);
+        return novelSectionRepository.save(novelSection);
     }
 
     @Override

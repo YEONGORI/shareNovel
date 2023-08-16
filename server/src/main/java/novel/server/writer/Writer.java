@@ -34,4 +34,12 @@ public class Writer {
 
     @OneToMany(mappedBy = "writer")
     private List<NovelSection> novelSections = new ArrayList<>();
+
+    public void setNovelSections(List<NovelSection> novelSections) {
+        this.novelSections = novelSections;
+    }
+
+    public void setWriterNovels(List<WriterNovel> writerNovels) {
+        this.writerNovels = writerNovels;
+    }
 }

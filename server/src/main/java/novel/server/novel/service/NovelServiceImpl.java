@@ -1,5 +1,6 @@
 package novel.server.novel.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import novel.server.novel.Novel;
 import novel.server.novel.NovelRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class NovelServiceImpl implements NovelService {
     private final NovelRepository novelRepository;
@@ -21,9 +23,8 @@ public class NovelServiceImpl implements NovelService {
     private final WriterNovelRepository writerNovelRepository;
 
     @Override
-    public void register(NovelRegisterDto registerDto) {
+    public Novel register(NovelRegisterDto registerDto) {
         Novel novel = registerDto.toEntity();
-        novelRepository.save(novel);
 
         Writer writer = writerRepository.findWriterByPenName(registerDto.getPenName())
                 .orElseThrow(() -> new BadCredentialsException("등록되지 않은 사용자입니다."));
@@ -35,6 +36,8 @@ public class NovelServiceImpl implements NovelService {
 
         novel.getWriterNovels().add(writerNovel);
         writer.getWriterNovels().add(writerNovel);
+        novelRepository.save(novel);
         writerNovelRepository.save(writerNovel);
+        return novel;
     }
 }

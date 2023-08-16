@@ -7,6 +7,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface MemberService {
-    String register(MemberDefaultRegisterDto registerDto);
+    Member register(MemberDefaultRegisterDto registerDto);
     TokenInfo login(MemberDefaultLoginDto loginDto);
 }

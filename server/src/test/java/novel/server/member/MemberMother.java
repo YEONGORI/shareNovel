@@ -13,22 +13,30 @@ import static org.jeasy.random.FieldPredicates.ofType;
 
 public class MemberMother {
     public static MemberDefaultRegisterDto registerDto() {
-        EasyRandomParameters randomParameters = new EasyRandomParameters()
-                .charset(StandardCharsets.UTF_8)
-                .randomize(named("penName").and(ofType(String.class)), new StringRandomizer(30))
-                .randomize(named("password").and(ofType(String.class)), new StringRandomizer(100));
+        EasyRandomParameters randomParameters = getRandomParameters();
 
         EasyRandom easyRandom = new EasyRandom(randomParameters);
         return easyRandom.nextObject(MemberDefaultRegisterDto.class);
     }
 
     public static MemberDefaultLoginDto loginDto() {
-        EasyRandomParameters randomParameters = new EasyRandomParameters()
-                .charset(StandardCharsets.UTF_8)
-                .randomize(named("penName").and(ofType(String.class)), new StringRandomizer(30))
-                .randomize(named("password").and(ofType(String.class)), new StringRandomizer(100));
+        EasyRandomParameters randomParameters = getRandomParameters();
 
         EasyRandom easyRandom = new EasyRandom(randomParameters);
         return easyRandom.nextObject(MemberDefaultLoginDto.class);
+    }
+
+    public static Member generateMember() {
+        EasyRandomParameters randomParameters = getRandomParameters();
+
+        EasyRandom easyRandom = new EasyRandom(randomParameters);
+        return easyRandom.nextObject(Member.class);
+    }
+
+    private static EasyRandomParameters getRandomParameters() {
+        return new EasyRandomParameters()
+                .charset(StandardCharsets.UTF_8)
+                .randomize(named("penName").and(ofType(String.class)), new StringRandomizer(30))
+                .randomize(named("password").and(ofType(String.class)), new StringRandomizer(100));
     }
 }
