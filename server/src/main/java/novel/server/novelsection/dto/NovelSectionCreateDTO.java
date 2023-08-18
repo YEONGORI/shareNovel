@@ -6,6 +6,8 @@ import lombok.*;
 import novel.server.novelsection.NovelSection;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.ArrayList;
+
 @Getter
 @Builder
 @ToString
@@ -24,6 +26,7 @@ public class NovelSectionCreateDTO {
         return NovelSection.builder()
                 .content(content)
                 .part(part)
+                .votes(new ArrayList<>())
                 .build();
     }
 }
