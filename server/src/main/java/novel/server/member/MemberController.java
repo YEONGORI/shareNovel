@@ -4,8 +4,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import novel.server.member.auth.TokenInfo;
-import novel.server.member.dto.MemberDefaultLoginDto;
-import novel.server.member.dto.MemberDefaultRegisterDto;
+import novel.server.member.dto.MemberDefaultLoginDTO;
+import novel.server.member.dto.MemberDefaultRegisterDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +21,7 @@ public class MemberController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(
-            @Validated @RequestBody MemberDefaultRegisterDto memberDefaultRegisterDto,
+            @Validated @RequestBody MemberDefaultRegisterDTO memberDefaultRegisterDto,
             HttpServletResponse response
     ) {
         memberService.register(memberDefaultRegisterDto);
@@ -31,7 +31,7 @@ public class MemberController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(
-            @Validated @RequestBody MemberDefaultLoginDto memberDefaultLoginDto
+            @Validated @RequestBody MemberDefaultLoginDTO memberDefaultLoginDto
     ) {
         TokenInfo tokenInfo = memberService.login(memberDefaultLoginDto);
         return makeReponseEntity(tokenInfo, HttpStatus.ACCEPTED);

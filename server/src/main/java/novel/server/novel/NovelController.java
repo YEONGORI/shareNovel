@@ -3,7 +3,7 @@ package novel.server.novel;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import novel.server.novel.dto.NovelRegisterDto;
+import novel.server.novel.dto.NovelRegisterDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,7 +18,7 @@ public class NovelController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(
-            @Validated @RequestBody NovelRegisterDto novelRegisterDto,
+            @Validated @RequestBody NovelRegisterDTO novelRegisterDto,
             HttpServletResponse response
     ) {
         novelService.register(novelRegisterDto);

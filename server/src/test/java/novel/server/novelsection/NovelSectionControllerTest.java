@@ -1,4 +1,4 @@
-package novel.server.novelsection.service;
+package novel.server.novelsection;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import novel.server.member.Member;
@@ -10,9 +10,8 @@ import novel.server.novel.Novel;
 import novel.server.novel.NovelMother;
 import novel.server.novel.NovelService;
 import novel.server.novel.dto.NovelRegisterDTO;
-import novel.server.novelsection.NovelSection;
-import novel.server.novelsection.NovelSectionService;
 import novel.server.novelsection.dto.NovelSectionCreateDTO;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +23,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -39,13 +40,15 @@ public class NovelSectionControllerTest {
     @Autowired
     NovelService novelService;
     @Autowired
+    NovelSectionRepository novelSectionRepository;
+    @Autowired
     ObjectMapper objectMapper;
     @Autowired
     private MockMvc mockMvc;
 
-    public static Member member;
-    public static Novel novel;
-    public static TokenInfo tokenInfo;
+    private Member member;
+    private Novel novel;
+    private TokenInfo tokenInfo;
 
     @BeforeEach
     void setup() {
@@ -132,7 +135,53 @@ public class NovelSectionControllerTest {
         );
 
         // then
-        resultAction1.andExpect(status().isBadRequest());
-        resultAction2.andExpect(status().isBadRequest());
+        resultAction1.andExpect(status().isMethodNotAllowed());
+        resultAction2.andExpect(status().isMethodNotAllowed());
+    }
+
+    @Test
+    @DisplayName("소설 섹션 투표 요청 컨트롤러 테스트")
+    protected void voteNovelSection1() throws Exception {
+        // given
+        NovelSectionCreateDTO novelSectionCreateDTO = NovelSectionMother.createDto();
+        novelSectionService.createNovelSection(novel.getId(), member.getId(), novelSectionCreateDTO);
+        List<NovelSection> novelSections = novelSectionRepository.findNovelSectionByNovel(novel).get();
+        NovelSection novelSection = novelSections.get(0);
+
+        // when
+        ResultActions resultAction = mockMvc.perform(MockMvcRequestBuilders
+                .post("/api/section/vote/{novelSectionId}", novelSection.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", tokenInfo.getGrantType() + " " + tokenInfo.getAccessToken())
+        );
+
+        // then
+        resultAction.andExpect(status().isAccepted());
+    }
+
+    @Test
+    @DisplayName("소설 섹션 중복 투표 테스트")
+    protected void voteNovelSection2() throws Exception {
+        // given
+        NovelSectionCreateDTO novelSectionCreateDTO = NovelSectionMother.createDto();
+        novelSectionService.createNovelSection(novel.getId(), member.getId(), novelSectionCreateDTO);
+        List<NovelSection> novelSections = novelSectionRepository.findNovelSectionByNovel(novel).get();
+        NovelSection novelSection = novelSections.get(0);
+
+        // when
+        ResultActions resultAction1 = mockMvc.perform(MockMvcRequestBuilders
+                .post("/api/section/vote/{novelSectionId}", novelSection.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", tokenInfo.getGrantType() + " " + tokenInfo.getAccessToken())
+        );
+        ResultActions resultAction2 = mockMvc.perform(MockMvcRequestBuilders
+                .post("/api/section/vote/{novelSectionId}", novelSection.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", tokenInfo.getGrantType() + " " + tokenInfo.getAccessToken())
+        );
+
+        // then
+        resultAction1.andExpect(status().isAccepted());
+        resultAction2.andExpect(status().isMethodNotAllowed());
     }
 }

@@ -1,8 +1,8 @@
 package novel.server.member;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import novel.server.member.dto.MemberDefaultLoginDto;
-import novel.server.member.dto.MemberDefaultRegisterDto;
+import novel.server.member.dto.MemberDefaultLoginDTO;
+import novel.server.member.dto.MemberDefaultRegisterDTO;
 import novel.server.writer.Writer;
 import novel.server.writer.WriterRepository;
 import org.assertj.core.api.Assertions;
@@ -40,7 +40,7 @@ class MemberControllerTest {
     @DisplayName("회원 가입 요청")
     void register() throws Exception {
         // given
-        MemberDefaultRegisterDto registerDto = MemberMother.registerDto();
+        MemberDefaultRegisterDTO registerDto = MemberMother.registerDto();
         // when
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/api/member/register")
@@ -53,7 +53,7 @@ class MemberControllerTest {
     @DisplayName("중복 회원 가입 요청")
     void dupRegister() throws Exception {
         // given
-        MemberDefaultRegisterDto registerDto = MemberMother.registerDto();
+        MemberDefaultRegisterDTO registerDto = MemberMother.registerDto();
 
         // when
         mockMvc.perform(MockMvcRequestBuilders
@@ -74,16 +74,16 @@ class MemberControllerTest {
     @DisplayName("회원 가입 요청 검증")
     void validateRegisterRequest() throws Exception {
         // given
-        MemberDefaultRegisterDto registerDto0 = MemberMother.registerDto();
-        MemberDefaultRegisterDto registerDto1 = MemberDefaultRegisterDto.builder()
+        MemberDefaultRegisterDTO registerDto0 = MemberMother.registerDto();
+        MemberDefaultRegisterDTO registerDto1 = MemberDefaultRegisterDTO.builder()
                 .penName(null)
                 .password(null)
                 .build();
-        MemberDefaultRegisterDto registerDto2 = MemberDefaultRegisterDto.builder()
+        MemberDefaultRegisterDTO registerDto2 = MemberDefaultRegisterDTO.builder()
                 .penName("")
                 .password("password")
                 .build();
-        MemberDefaultRegisterDto registerDto3 = MemberDefaultRegisterDto.builder()
+        MemberDefaultRegisterDTO registerDto3 = MemberDefaultRegisterDTO.builder()
                 .penName("penName")
                 .password("")
                 .build();
@@ -118,7 +118,7 @@ class MemberControllerTest {
     @DisplayName("회원가입시 Member - Writer 1:1 양방향 매칭 검증")
     void MemberWriterOneToOne() {
         // given
-        MemberDefaultRegisterDto registerDto = MemberMother.registerDto();
+        MemberDefaultRegisterDTO registerDto = MemberMother.registerDto();
 
         // when
         memberService.register(registerDto);
@@ -135,8 +135,8 @@ class MemberControllerTest {
     @DisplayName("로그인 요청")
     void login() throws Exception {
         // given
-        MemberDefaultRegisterDto registerDto = MemberMother.registerDto();
-        MemberDefaultLoginDto loginDto = MemberDefaultLoginDto.builder()
+        MemberDefaultRegisterDTO registerDto = MemberMother.registerDto();
+        MemberDefaultLoginDTO loginDto = MemberDefaultLoginDTO.builder()
                 .penName(registerDto.getPenName())
                 .password(registerDto.getPassword())
                 .build();
@@ -160,12 +160,12 @@ class MemberControllerTest {
     @DisplayName("인증되지 않은 로그인 요청")
     void loginNotAuthorized() throws Exception {
         // given
-        MemberDefaultRegisterDto registerDto = MemberMother.registerDto();
-        MemberDefaultLoginDto loginDto1 = MemberDefaultLoginDto.builder()
+        MemberDefaultRegisterDTO registerDto = MemberMother.registerDto();
+        MemberDefaultLoginDTO loginDto1 = MemberDefaultLoginDTO.builder()
                 .penName(registerDto.getPenName())
                 .password("TEST")
                 .build();
-        MemberDefaultLoginDto loginDto2 = MemberDefaultLoginDto.builder()
+        MemberDefaultLoginDTO loginDto2 = MemberDefaultLoginDTO.builder()
                 .penName("TEST")
                 .password(registerDto.getPassword())
                 .build();
@@ -193,13 +193,13 @@ class MemberControllerTest {
     @DisplayName("로그인 요청 검증")
     void validateLoginRequest() throws Exception {
         // given
-        MemberDefaultLoginDto loginDto1 = MemberDefaultLoginDto.builder()
+        MemberDefaultLoginDTO loginDto1 = MemberDefaultLoginDTO.builder()
                 .penName("").password("").build();
 
-        MemberDefaultLoginDto loginDto2 = MemberDefaultLoginDto.builder()
+        MemberDefaultLoginDTO loginDto2 = MemberDefaultLoginDTO.builder()
                 .penName(null).password("TEST").build();
 
-        MemberDefaultLoginDto loginDto3 = MemberDefaultLoginDto.builder()
+        MemberDefaultLoginDTO loginDto3 = MemberDefaultLoginDTO.builder()
                 .penName("TEST").password(null).build();
 
         // when

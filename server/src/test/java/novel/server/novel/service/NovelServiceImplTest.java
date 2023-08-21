@@ -1,10 +1,10 @@
 package novel.server.novel.service;
 
-import novel.server.member.dto.MemberDefaultRegisterDto;
+import novel.server.member.dto.MemberDefaultRegisterDTO;
 import novel.server.novel.Novel;
 import novel.server.novel.NovelMother;
 import novel.server.novel.NovelRepository;
-import novel.server.novel.dto.NovelRegisterDto;
+import novel.server.novel.dto.NovelRegisterDTO;
 import novel.server.member.Member;
 import novel.server.member.MemberMother;
 import novel.server.member.MemberRepository;
@@ -39,11 +39,11 @@ class NovelServiceImplTest {
     @DisplayName("소설 등록")
     void register() {
         // given
-        MemberDefaultRegisterDto memberRegisterDto = MemberMother.registerDto();
+        MemberDefaultRegisterDTO memberRegisterDto = MemberMother.registerDto();
         Member member = memberRegisterDto.toEntity();
         Member savedMember = memberRepository.save(member);
 
-        NovelRegisterDto registerDto = NovelMother.registerDto();
+        NovelRegisterDTO registerDto = NovelMother.registerDto();
         Novel novel = registerDto.toEntity();
         novelRepository.save(novel);
 
@@ -75,11 +75,11 @@ class NovelServiceImplTest {
     @DisplayName("소설 - 작가 매핑 테스트 0")
     void register_mapping() {
         // given
-        MemberDefaultRegisterDto memberRegisterDto = MemberMother.registerDto();
+        MemberDefaultRegisterDTO memberRegisterDto = MemberMother.registerDto();
         Member member = memberRepository.save(memberRegisterDto.toEntity());
 
-        NovelRegisterDto registerDto0 = NovelMother.registerDto();
-        NovelRegisterDto registerDto1 = NovelMother.registerDto();
+        NovelRegisterDTO registerDto0 = NovelMother.registerDto();
+        NovelRegisterDTO registerDto1 = NovelMother.registerDto();
         Novel novel = novelRepository.save(registerDto0.toEntity());
         novelRepository.save(registerDto1.toEntity());
 

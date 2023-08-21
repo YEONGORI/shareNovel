@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import novel.server.member.Member;
 import novel.server.member.MemberMother;
 import novel.server.member.MemberService;
-import novel.server.novel.dto.NovelRegisterDto;
+import novel.server.novel.dto.NovelRegisterDTO;
 import novel.server.writer.Writer;
 import novel.server.writer.WriterRepository;
 import novel.server.writernovel.WriterNovel;
@@ -35,7 +35,7 @@ class NovelControllerTest {
     void writerToNovel() {
         // given
         int SIZE = 5;
-        ArrayList<NovelRegisterDto> registerNovelDtos = new ArrayList<>();
+        ArrayList<NovelRegisterDTO> registerNovelDtos = new ArrayList<>();
         ArrayList<Novel> registeredNovels = new ArrayList<>();
 
         Member member = memberService.register(MemberMother.registerDto());
@@ -46,7 +46,7 @@ class NovelControllerTest {
         }
 
         // when
-        for (NovelRegisterDto registerNovelDto : registerNovelDtos) {
+        for (NovelRegisterDTO registerNovelDto : registerNovelDtos) {
             registeredNovels.add(novelService.register(registerNovelDto));
         }
 
@@ -63,9 +63,9 @@ class NovelControllerTest {
     void UnAuthroizedWriter() {
         // given
         Member member = memberService.register(MemberMother.registerDto());
-        NovelRegisterDto registerDto0 = NovelMother.registerDto();
+        NovelRegisterDTO registerDto0 = NovelMother.registerDto();
         registerDto0.setPenName("UnAuthorizedWriter");
-        NovelRegisterDto registerDto1 = NovelMother.registerDto();
+        NovelRegisterDTO registerDto1 = NovelMother.registerDto();
         registerDto1.setPenName(member.getPenName());
 
         // when, then

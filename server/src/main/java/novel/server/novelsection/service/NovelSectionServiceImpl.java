@@ -12,6 +12,8 @@ import novel.server.novelsection.NovelSection;
 import novel.server.novelsection.NovelSectionRepository;
 import novel.server.novelsection.NovelSectionService;
 import novel.server.novelsection.dto.NovelSectionCreateDTO;
+import novel.server.novelsection.dto.NovelSectionResponseDTO;
+import novel.server.novelsection.exception.DuplicatedVoteException;
 import novel.server.novelsection.exception.NovelSectionNotExistsException;
 import novel.server.vote.Vote;
 import novel.server.writer.Writer;
@@ -28,7 +30,7 @@ public class NovelSectionServiceImpl implements NovelSectionService {
     private final MemberRepository memberRepository;
 
     @Override
-    public NovelSection createNovelSection(Long novelId, Long memberId, NovelSectionCreateDTO createDTO) {
+    public NovelSectionResponseDTO createNovelSection(Long novelId, Long memberId, NovelSectionCreateDTO createDTO) {
         Novel novel = novelRepository.findNovelById(novelId)
                 .orElseThrow(() -> new NovelNotExistsException("소설을 찾을 수 없습니다."));
         Member member = memberRepository.findById(memberId)
@@ -41,7 +43,8 @@ public class NovelSectionServiceImpl implements NovelSectionService {
         novelSection.setWriter(writer);
         writer.getNovelSections().add(novelSection);
 
-        return novelSectionRepository.save(novelSection);
+        NovelSection savedNovelSection = novelSectionRepository.save(novelSection);
+        return NovelSectionResponseDTO.fromEntity(savedNovelSection);
     }
 
     @Override
@@ -50,6 +53,9 @@ public class NovelSectionServiceImpl implements NovelSectionService {
                 .orElseThrow(() -> new NovelSectionNotExistsException("투표 하는 소설 구역을 확인해주세요."));
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotExistsException("사용자를 찾을 수 없습니다."));
+        if (novelSection.getVotes().stream().anyMatch(vote -> vote.getWriter().getId() == memberId)) {
+            throw new DuplicatedVoteException("중복 투표입니다.");
+        }
 
         Writer writer = member.getWriter();
 

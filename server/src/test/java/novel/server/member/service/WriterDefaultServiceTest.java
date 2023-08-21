@@ -3,8 +3,8 @@ package novel.server.member.service;
 import novel.server.member.Member;
 import novel.server.member.MemberRepository;
 import novel.server.member.auth.JwtTokenProvider;
-import novel.server.member.dto.MemberDefaultLoginDto;
-import novel.server.member.dto.MemberDefaultRegisterDto;
+import novel.server.member.dto.MemberDefaultLoginDTO;
+import novel.server.member.dto.MemberDefaultRegisterDTO;
 import novel.server.member.MemberMother;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ class MemberDefaultServiceTest {
     @DisplayName("회원 가입")
     void register() {
 
-        MemberDefaultRegisterDto registerDto = MemberMother.registerDto();
+        MemberDefaultRegisterDTO registerDto = MemberMother.registerDto();
         Member member = registerDto.toEntity();
         memberRepository.save(member);
 
@@ -47,10 +47,10 @@ class MemberDefaultServiceTest {
     @DisplayName("로그인")
     void login() {
         // given
-        MemberDefaultRegisterDto registerDto = MemberMother.registerDto();
+        MemberDefaultRegisterDTO registerDto = MemberMother.registerDto();
         Member member = registerDto.toEntity();
 
-        MemberDefaultLoginDto loginDto = MemberDefaultLoginDto.builder()
+        MemberDefaultLoginDTO loginDto = MemberDefaultLoginDTO.builder()
                 .penName(member.getPenName())
                 .password(member.getPassword())
                 .build();
@@ -67,7 +67,7 @@ class MemberDefaultServiceTest {
     @Test
     @DisplayName("비인증 사용자 확인 [미등록 사용자]")
     void NotAuthorized1() {
-        MemberDefaultLoginDto loginDto = MemberMother.loginDto();
+        MemberDefaultLoginDTO loginDto = MemberMother.loginDto();
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getPenName(), loginDto.getPassword());
         assertThrows(AuthenticationException.class,
                 () -> authenticationManagerBuilder.getObject().authenticate(authenticationToken));
@@ -76,21 +76,21 @@ class MemberDefaultServiceTest {
     @Test
     @DisplayName("비인증 사용자 확인 [필명, 비밀번호 불일치]")
     void NotAuthorized2() {
-        MemberDefaultRegisterDto registerDto = MemberMother.registerDto();
+        MemberDefaultRegisterDTO registerDto = MemberMother.registerDto();
         Member member = registerDto.toEntity();
         memberRepository.save(member);
 
-        MemberDefaultLoginDto loginDto0 = MemberDefaultLoginDto.builder()
+        MemberDefaultLoginDTO loginDto0 = MemberDefaultLoginDTO.builder()
                 .penName(member.getPenName())
                 .password(member.getPassword())
                 .build();
 
-        MemberDefaultLoginDto loginDto1 = MemberDefaultLoginDto.builder()
+        MemberDefaultLoginDTO loginDto1 = MemberDefaultLoginDTO.builder()
                 .penName(member.getPenName())
                 .password("TEST")
                 .build();
 
-        MemberDefaultLoginDto loginDto2 = MemberDefaultLoginDto.builder()
+        MemberDefaultLoginDTO loginDto2 = MemberDefaultLoginDTO.builder()
                 .penName("TEST")
                 .password(member.getPassword())
                 .build();

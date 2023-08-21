@@ -7,8 +7,8 @@ import novel.server.member.MemberRepository;
 import novel.server.member.MemberService;
 import novel.server.member.auth.JwtTokenProvider;
 import novel.server.member.auth.TokenInfo;
-import novel.server.member.dto.MemberDefaultLoginDto;
-import novel.server.member.dto.MemberDefaultRegisterDto;
+import novel.server.member.dto.MemberDefaultLoginDTO;
+import novel.server.member.dto.MemberDefaultRegisterDTO;
 import novel.server.member.exception.MemberAlreadyExistsException;
 import novel.server.writer.Writer;
 import novel.server.writer.WriterRepository;
@@ -18,7 +18,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 @Service
 @Transactional
@@ -31,7 +30,7 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public Member register(MemberDefaultRegisterDto registerDto) {
+    public Member register(MemberDefaultRegisterDTO registerDto) {
         if (memberRepository.findMemberByPenName(registerDto.getPenName()).isPresent()) {
             throw new MemberAlreadyExistsException("사용중인 필명 입니다.");
         }
@@ -49,7 +48,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public TokenInfo login(MemberDefaultLoginDto loginDto) {
+    public TokenInfo login(MemberDefaultLoginDTO loginDto) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getPenName(), loginDto.getPassword());
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         return jwtTokenProvider.createToken(authenticate);

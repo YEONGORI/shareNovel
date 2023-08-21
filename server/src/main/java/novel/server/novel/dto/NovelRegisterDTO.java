@@ -5,15 +5,15 @@ import lombok.*;
 import novel.server.novel.Novel;
 import org.hibernate.validator.constraints.Length;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 
 @Getter
 @Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class NovelRegisterDto {
+public class NovelRegisterDTO {
     @NotBlank
     @Length(max = 100)
     private String title;
@@ -47,6 +47,8 @@ public class NovelRegisterDto {
                 .event(event)
                 .novelSections(new ArrayList<>())
                 .writerNovels(new ArrayList<>())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build();
     }
 }

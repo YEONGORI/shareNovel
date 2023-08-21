@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import novel.server.member.dto.CustomUser;
 import novel.server.novelsection.dto.NovelSectionCreateDTO;
+import novel.server.novelsection.dto.NovelSectionResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,8 +25,8 @@ public class NovelSectionController {
             HttpServletResponse response
     ) {
         Long memberId = getMemberId();
-        NovelSection novelSection = novelSectionService.createNovelSection(novelId, memberId, createDTO);
-        return makeResponseEntity(novelSection, HttpStatus.CREATED);
+        NovelSectionResponseDTO novelSectionResponseDTO = novelSectionService.createNovelSection(novelId, memberId, createDTO);
+        return makeResponseEntity(novelSectionResponseDTO, HttpStatus.CREATED);
     }
 
     @PostMapping("/vote/{novelSectionId}")

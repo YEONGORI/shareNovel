@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import novel.server.novel.Novel;
 import novel.server.novel.NovelRepository;
 import novel.server.novel.NovelService;
-import novel.server.novel.dto.NovelRegisterDto;
+import novel.server.novel.dto.NovelRegisterDTO;
 import novel.server.writer.Writer;
 import novel.server.writer.WriterRepository;
 import novel.server.writernovel.WriterNovel;
@@ -23,7 +23,7 @@ public class NovelServiceImpl implements NovelService {
     private final WriterNovelRepository writerNovelRepository;
 
     @Override
-    public Novel register(NovelRegisterDto registerDto) {
+    public Novel register(NovelRegisterDTO registerDto) {
         Novel novel = registerDto.toEntity();
 
         Writer writer = writerRepository.findWriterByPenName(registerDto.getPenName())

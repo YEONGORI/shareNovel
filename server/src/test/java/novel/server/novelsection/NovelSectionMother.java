@@ -1,4 +1,4 @@
-package novel.server.novelsection.service;
+package novel.server.novelsection;
 
 import novel.server.novelsection.dto.NovelSectionCreateDTO;
 import org.jeasy.random.EasyRandom;

@@ -3,6 +3,7 @@ package novel.server.vote;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import novel.server.novelsection.NovelSection;
 import novel.server.writer.Writer;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
 public class Vote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

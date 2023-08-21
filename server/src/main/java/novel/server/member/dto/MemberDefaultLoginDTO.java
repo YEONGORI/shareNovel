@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.Length;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberDefaultLoginDto {
+public class MemberDefaultLoginDTO {
     @NotBlank
     @Length(max = 30)
     private String penName;
