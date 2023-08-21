@@ -1,14 +1,9 @@
 package novel.server.novelsection.service;
 
-import novel.server.novel.dto.NovelRegisterDto;
-import novel.server.novelsection.NovelSection;
 import novel.server.novelsection.dto.NovelSectionCreateDTO;
 import org.jeasy.random.EasyRandom;
 import org.jeasy.random.EasyRandomParameters;
-import org.jeasy.random.api.Randomizer;
-import org.jeasy.random.randomizers.number.IntegerRandomizer;
 import org.jeasy.random.randomizers.range.IntegerRangeRandomizer;
-import org.jeasy.random.randomizers.text.StringRandomizer;
 
 import java.nio.charset.StandardCharsets;
 
