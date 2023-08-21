@@ -28,10 +28,7 @@ public class Member {
 
     private LocalDateTime createdAt;
 
+    @Setter
     @OneToOne(mappedBy = "member")
     private Writer writer;
-
-    public void setWriter(Writer writer) {
-        this.writer = writer;
-    }
 }

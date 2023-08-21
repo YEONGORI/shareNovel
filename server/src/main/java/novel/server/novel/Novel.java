@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import novel.server.novelsection.NovelSection;
+import novel.server.stake.Stake;
 import novel.server.vote.Vote;
 import novel.server.writernovel.WriterNovel;
 import org.hibernate.validator.constraints.Length;
@@ -45,6 +46,9 @@ public class Novel {
     @OneToMany(mappedBy = "novel", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<NovelSection> novelSections = new ArrayList<>();
 
-    @OneToMany(mappedBy = "novel", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "novel")
     private List<WriterNovel> writerNovels = new ArrayList<>();
+
+    @OneToMany(mappedBy = "novel")
+    private List<Stake> stakes = new ArrayList<>();
 }

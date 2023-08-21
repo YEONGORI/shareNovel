@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import novel.server.member.Member;
 import novel.server.novelsection.NovelSection;
+import novel.server.stake.Stake;
 import novel.server.writernovel.WriterNovel;
 
 import java.util.ArrayList;
@@ -35,11 +36,6 @@ public class Writer {
     @OneToMany(mappedBy = "writer")
     private List<NovelSection> novelSections = new ArrayList<>();
 
-    public void setNovelSections(List<NovelSection> novelSections) {
-        this.novelSections = novelSections;
-    }
-
-    public void setWriterNovels(List<WriterNovel> writerNovels) {
-        this.writerNovels = writerNovels;
-    }
+    @OneToMany(mappedBy = "writer")
+    private List<Stake> stakes = new ArrayList<>();
 }

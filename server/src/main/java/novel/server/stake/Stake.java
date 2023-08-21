@@ -1,20 +1,28 @@
 package novel.server.stake;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import novel.server.novel.Novel;
+import novel.server.writer.Writer;
 
 @Entity
 @Getter
-@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Stake {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     private double stakeValue;
 
-//    @OneToOne
-//    @JoinColumn(name = "participation_id")
-//    private WriterParticipation participation;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer_id", nullable = false)
+    private Writer writer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "novel_id", nullable = false)
+    private Novel novel;
 }
