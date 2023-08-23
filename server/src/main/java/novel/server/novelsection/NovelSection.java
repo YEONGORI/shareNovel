@@ -21,8 +21,8 @@ public class NovelSection {
     @Column(columnDefinition = "TEXT")
     private String content;
     private Integer part;
-    @OneToMany(mappedBy = "novelSection", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Vote> votes = new ArrayList<>();
+//    @OneToMany(mappedBy = "novelSection", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Vote> votes = new ArrayList<>();
     @Setter
     @ManyToOne
     @JoinColumn(name = "novel_id", nullable = false)

@@ -113,7 +113,7 @@ class NovelSectionServiceImplTest {
         // given
         NovelSectionCreateDTO novelSectionCreateDTO = NovelSectionMother.createDto();
         novelSectionService.createNovelSection(novel.getId(), member.getId(), novelSectionCreateDTO);
-        List<NovelSection> novelSections = novelSectionRepository.findNovelSectionByNovel(novel).get();
+        List<NovelSection> novelSections = novelSectionRepository.findNovelSectionsByNovel(novel).get();
         NovelSection novelSection = novelSections.get(0);
 
         // when

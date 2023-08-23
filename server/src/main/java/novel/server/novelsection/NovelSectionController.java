@@ -11,6 +11,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @ResponseBody
 @RestController
 @RequestMapping("/api/section")
@@ -29,14 +32,12 @@ public class NovelSectionController {
         return makeResponseEntity(novelSectionResponseDTO, HttpStatus.CREATED);
     }
 
-    @PostMapping("/vote/{novelSectionId}")
-    public ResponseEntity<?> voteNovelSection(
-            @PathVariable Long novelSectionId,
-            HttpServletResponse response
+    @GetMapping("/list")
+    public ResponseEntity<?> getNovelSectionList(
+            @PathVariable Long novelId
     ) {
-        Long memberId = getMemberId();
-        novelSectionService.voteNovelSection(novelSectionId, memberId);
-        return makeResponseEntity("ok", HttpStatus.ACCEPTED);
+        Map<Integer, List<NovelSection>> novelSectionList = novelSectionService.getNovelSectionList(novelId);
+        return makeResponseEntity(novelSectionList, HttpStatus.OK);
     }
 
     private static Long getMemberId() {

@@ -6,6 +6,7 @@ import novel.server.novel.Novel;
 import novel.server.novel.NovelRepository;
 import novel.server.novel.NovelService;
 import novel.server.novel.dto.NovelRegisterDTO;
+import novel.server.stake.Stake;
 import novel.server.writer.Writer;
 import novel.server.writer.WriterRepository;
 import novel.server.writernovel.WriterNovel;
@@ -34,7 +35,14 @@ public class NovelServiceImpl implements NovelService {
                 .novel(novel)
                 .build();
 
+        Stake stake = Stake.builder()
+                .writer(writer)
+                .novel(novel)
+                .stakeValue(1.0)
+                .build();
+
         novel.getWriterNovels().add(writerNovel);
+        novel.getStakes().add(stake);
         writer.getWriterNovels().add(writerNovel);
         novelRepository.save(novel);
         writerNovelRepository.save(writerNovel);

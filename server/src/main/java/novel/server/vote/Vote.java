@@ -10,16 +10,17 @@ import novel.server.writer.Writer;
 
 import java.time.LocalDateTime;
 
+@Entity
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Getter
 public class Vote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDateTime votedAt;
+    private LocalDateTime expiredAt;
 
     @OneToOne
     @JoinColumn(name = "writer_id")

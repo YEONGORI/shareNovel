@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface NovelSectionRepository extends JpaRepository<NovelSection, Long> {
     Optional<NovelSection> findNovelSectionById(Long id);
 
-    Optional<List<NovelSection>> findNovelSectionByNovel(Novel novel);
+    Optional<List<NovelSection>> findNovelSectionsByNovel(Novel novel);
 }

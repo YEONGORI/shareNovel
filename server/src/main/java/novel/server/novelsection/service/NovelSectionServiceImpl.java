@@ -20,6 +20,11 @@ import novel.server.writer.Writer;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -48,23 +53,37 @@ public class NovelSectionServiceImpl implements NovelSectionService {
     }
 
     @Override
-    public void voteNovelSection(Long novelSectionId, Long memberId) {
-        NovelSection novelSection = novelSectionRepository.findNovelSectionById(novelSectionId)
-                .orElseThrow(() -> new NovelSectionNotExistsException("투표 하는 소설 구역을 확인해주세요."));
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotExistsException("사용자를 찾을 수 없습니다."));
-        if (novelSection.getVotes().stream().anyMatch(vote -> vote.getWriter().getId() == memberId)) {
-            throw new DuplicatedVoteException("중복 투표입니다.");
-        }
+    public Map<Integer, List<NovelSection>> getNovelSectionList(Long novelId) {
+        Novel novel = novelRepository.findNovelById(novelId)
+                .orElseThrow(() -> new NovelNotExistsException("소설을 찾을 수 없습니다."));
 
-        Writer writer = member.getWriter();
-
-        Vote vote = Vote.builder()
-                .writer(writer)
-                .novelSection(novelSection)
-                .votedAt(LocalDateTime.now())
-                .build();
-
-        novelSection.getVotes().add(vote);
+        List<NovelSection> novelSections = novelSectionRepository.findNovelSectionsByNovel(novel)
+                .orElse(null);
+        if (novelSections == null)
+            return null;
+        return novelSections.stream()
+                .collect(Collectors.groupingByConcurrent(NovelSection::getPart));
     }
+
+
+//    @Override
+//    public void voteNovelSection(Long novelSectionId, Long memberId) {
+//        NovelSection novelSection = novelSectionRepository.findNovelSectionById(novelSectionId)
+//                .orElseThrow(() -> new NovelSectionNotExistsException("투표 하는 소설 구역을 확인해주세요."));
+//        Member member = memberRepository.findById(memberId)
+//                .orElseThrow(() -> new MemberNotExistsException("사용자를 찾을 수 없습니다."));
+//        if (novelSection.getVotes().stream().anyMatch(vote -> vote.getWriter().getId() == memberId)) {
+//            throw new DuplicatedVoteException("중복 투표입니다.");
+//        }
+//
+//        Writer writer = member.getWriter();
+//
+//        Vote vote = Vote.builder()
+//                .writer(writer)
+//                .novelSection(novelSection)
+//                .votedAt(LocalDateTime.now())
+//                .build();
+//
+//        novelSection.getVotes().add(vote);
+//    }
 }
