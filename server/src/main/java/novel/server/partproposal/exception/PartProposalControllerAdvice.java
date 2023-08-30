@@ -1,11 +1,12 @@
-package novel.server.novelsection.exception;
+package novel.server.partproposal.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import novel.server.global.ErrorResult;
 import novel.server.global.ResultCode;
+import novel.server.like.exception.DuplicatedLikeException;
 import novel.server.member.exception.MemberNotExistsException;
 import novel.server.novel.exception.NovelNotExistsException;
-import novel.server.novelsection.NovelSectionController;
+import novel.server.partproposal.PartProposalController;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,15 +14,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
 
 @Slf4j
-@RestControllerAdvice(assignableTypes = NovelSectionController.class)
-public class NovelSectionControllerAdvice {
+@RestControllerAdvice(assignableTypes = PartProposalController.class)
+public class PartProposalControllerAdvice {
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ErrorResult methodArgumentExHandle(MethodArgumentNotValidException e) {
@@ -36,8 +36,8 @@ public class NovelSectionControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(NovelSectionNotExistsException.class)
-    protected ErrorResult novelSectionExHandle(NovelSectionNotExistsException e) {
+    @ExceptionHandler(PartProposalNotExistsException.class)
+    protected ErrorResult novelSectionExHandle(PartProposalNotExistsException e) {
         log.error("NovelSection Not Exists Exception Handler = ", e);
         return new ErrorResult(ResultCode.ERROR, singletonList(e.getMessage()));
     }
@@ -63,8 +63,8 @@ public class NovelSectionControllerAdvice {
         return new ErrorResult(ResultCode.ERROR, singletonList(e.getMessage()));
     }
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    @ExceptionHandler(DuplicatedVoteException.class)
-    protected ErrorResult voteExHandle(DuplicatedVoteException e) {
+    @ExceptionHandler(DuplicatedLikeException.class)
+    protected ErrorResult voteExHandle(DuplicatedLikeException e) {
         log.error("Vote Exception Handler = ", e);
         return new ErrorResult(ResultCode.ERROR, singletonList(e.getMessage()));
     }

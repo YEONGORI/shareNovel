@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import novel.server.member.Member;
-import novel.server.novelsection.NovelSection;
+import novel.server.partproposal.PartProposal;
 import novel.server.stake.Stake;
 import novel.server.writernovel.WriterNovel;
 
@@ -34,7 +34,7 @@ public class Writer {
     private List<WriterNovel> writerNovels = new ArrayList<>();
 
     @OneToMany(mappedBy = "writer")
-    private List<NovelSection> novelSections = new ArrayList<>();
+    private List<PartProposal> partProposals = new ArrayList<>();
 
     @OneToMany(mappedBy = "writer")
     private List<Stake> stakes = new ArrayList<>();

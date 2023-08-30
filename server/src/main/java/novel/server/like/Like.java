@@ -1,11 +1,11 @@
-package novel.server.vote;
+package novel.server.like;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import novel.server.novelsection.NovelSection;
+import novel.server.partproposal.PartProposal;
 import novel.server.writer.Writer;
 
 import java.time.LocalDateTime;
@@ -15,18 +15,16 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Vote {
+public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDateTime votedAt;
-    private LocalDateTime expiredAt;
 
     @OneToOne
     @JoinColumn(name = "writer_id")
     private Writer writer;
 
     @ManyToOne
-    @JoinColumn(name = "novel_section_id")
-    private NovelSection novelSection;
+    @JoinColumn(name = "part_proposal_id")
+    private PartProposal partProposal;
 }

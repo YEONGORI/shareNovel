@@ -1,4 +1,4 @@
-package novel.server.novelsection.service;
+package novel.server.partproposal.service;
 
 import novel.server.member.Member;
 import novel.server.member.MemberMother;
@@ -8,12 +8,12 @@ import novel.server.novel.Novel;
 import novel.server.novel.NovelMother;
 import novel.server.novel.NovelService;
 import novel.server.novel.dto.NovelRegisterDTO;
-import novel.server.novelsection.NovelSection;
-import novel.server.novelsection.NovelSectionRepository;
-import novel.server.novelsection.NovelSectionMother;
-import novel.server.novelsection.NovelSectionService;
-import novel.server.novelsection.dto.NovelSectionCreateDTO;
-import novel.server.vote.Vote;
+import novel.server.partproposal.PartProposal;
+import novel.server.partproposal.PartProposalRepository;
+import novel.server.partproposal.NovelSectionMother;
+import novel.server.partproposal.PartProposalService;
+import novel.server.partproposal.dto.PartProposalPostReqDTO;
+import novel.server.like.Like;
 import novel.server.writer.Writer;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,15 +30,15 @@ import static org.assertj.core.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
-class NovelSectionServiceImplTest {
+class PartProposalServiceImplTest {
     @Autowired
     NovelService novelService;
     @Autowired
     MemberService memberService;
     @Autowired
-    NovelSectionService novelSectionService;
+    PartProposalService partProposalService;
     @Autowired
-    NovelSectionRepository novelSectionRepository;
+    PartProposalRepository partProposalRepository;
 
     private Member member;
     private Novel novel;
@@ -55,9 +55,9 @@ class NovelSectionServiceImplTest {
 
         writer = member.getWriter();
 
-        NovelSection novelSection = NovelSectionMother.createDto().toEntity();
-        novelSection.setNovel(novel);
-        novelSection.setWriter(writer);
+        PartProposal partProposal = NovelSectionMother.createDto().toEntity();
+        partProposal.setNovel(novel);
+        partProposal.setWriter(writer);
 
     }
 
@@ -65,14 +65,14 @@ class NovelSectionServiceImplTest {
     @DisplayName("소설 섹션 생성 테스트")
     void createNovelSection() {
         // given
-        NovelSection novelSection = NovelSectionMother.createDto().toEntity();
-        novelSection.setNovel(novel);
-        novelSection.setWriter(writer);
+        PartProposal partProposal = NovelSectionMother.createDto().toEntity();
+        partProposal.setNovel(novel);
+        partProposal.setWriter(writer);
 
         // when
-        writer.getNovelSections().add(novelSection);
-        novelSectionRepository.save(novelSection);
-        NovelSection section = novelSectionRepository.findNovelSectionById(novelSection.getId()).get();
+        writer.getPartProposals().add(partProposal);
+        partProposalRepository.save(partProposal);
+        PartProposal section = partProposalRepository.findNovelSectionById(partProposal.getId()).get();
 
         // then
         assertThat(section.getNovel().getId()).isEqualTo(novel.getId());
@@ -83,27 +83,27 @@ class NovelSectionServiceImplTest {
     @DisplayName("소설 섹션 투표 서비스 테스트1")
     void voteNovelSection1() {
         // given
-        NovelSection novelSection = NovelSectionMother.createDto().toEntity();
-        novelSection.setNovel(novel);
-        novelSection.setWriter(writer);
+        PartProposal partProposal = NovelSectionMother.createDto().toEntity();
+        partProposal.setNovel(novel);
+        partProposal.setWriter(writer);
 
-        writer.getNovelSections().add(novelSection);
-        novelSectionRepository.save(novelSection);
+        writer.getPartProposals().add(partProposal);
+        partProposalRepository.save(partProposal);
 
 
-        Vote vote = Vote.builder()
+        Like like = Like.builder()
                 .writer(writer)
-                .novelSection(novelSection)
+                .partProposal(partProposal)
                 .votedAt(LocalDateTime.now())
                 .build();
 
         // when
-        novelSection.getVotes().add(vote);
-        NovelSection section = novelSectionRepository.findNovelSectionById(novelSection.getId()).get();
+        partProposal.getVotes().add(like);
+        PartProposal section = partProposalRepository.findNovelSectionById(partProposal.getId()).get();
 
         // then
         assertThat(section.getVotes().size()).isEqualTo(1);
-        novelSection.getVotes().add(vote);
+        partProposal.getVotes().add(like);
         assertThat(section.getVotes().size()).isEqualTo(2);
     }
 
@@ -111,14 +111,14 @@ class NovelSectionServiceImplTest {
     @DisplayName("소설 섹션 투표 서비스 테스트2")
     protected void voteNovelSection2() {
         // given
-        NovelSectionCreateDTO novelSectionCreateDTO = NovelSectionMother.createDto();
-        novelSectionService.createNovelSection(novel.getId(), member.getId(), novelSectionCreateDTO);
-        List<NovelSection> novelSections = novelSectionRepository.findNovelSectionsByNovel(novel).get();
-        NovelSection novelSection = novelSections.get(0);
+        PartProposalPostReqDTO partProposalPostReqDTO = NovelSectionMother.createDto();
+        partProposalService.createNovelSection(novel.getId(), member.getId(), partProposalPostReqDTO);
+        List<PartProposal> partProposals = partProposalRepository.findNovelSectionsByNovel(novel).get();
+        PartProposal partProposal = partProposals.get(0);
 
         // when
-        novelSectionService.voteNovelSection(novelSection.getId(), member.getId());
-        NovelSection section = novelSectionRepository.findNovelSectionById(novelSection.getId()).get();
+        partProposalService.voteNovelSection(partProposal.getId(), member.getId());
+        PartProposal section = partProposalRepository.findNovelSectionById(partProposal.getId()).get();
 
         // then
         Assertions.assertThat(section.getVotes().size()).isEqualTo(1);

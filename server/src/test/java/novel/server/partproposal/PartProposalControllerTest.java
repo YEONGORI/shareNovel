@@ -1,4 +1,4 @@
-package novel.server.novelsection;
+package novel.server.partproposal;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import novel.server.member.Member;
@@ -10,8 +10,7 @@ import novel.server.novel.Novel;
 import novel.server.novel.NovelMother;
 import novel.server.novel.NovelService;
 import novel.server.novel.dto.NovelRegisterDTO;
-import novel.server.novelsection.dto.NovelSectionCreateDTO;
-import org.assertj.core.api.Assertions;
+import novel.server.partproposal.dto.PartProposalPostReqDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,15 +31,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
-public class NovelSectionControllerTest {
+public class PartProposalControllerTest {
     @Autowired
-    NovelSectionService novelSectionService;
+    PartProposalService partProposalService;
     @Autowired
     MemberService memberService;
     @Autowired
     NovelService novelService;
     @Autowired
-    NovelSectionRepository novelSectionRepository;
+    PartProposalRepository partProposalRepository;
     @Autowired
     ObjectMapper objectMapper;
     @Autowired
@@ -67,13 +66,13 @@ public class NovelSectionControllerTest {
     @DisplayName("소설 섹션 생성 컨트롤러 테스트")
     void createNovelSection() throws Exception {
         // given
-        NovelSectionCreateDTO novelSectionCreateDTO = NovelSectionMother.createDto();
+        PartProposalPostReqDTO partProposalPostReqDTO = NovelSectionMother.createDto();
 
         // when
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders
                 .post("/api/section/{novelId}", novel.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(novelSectionCreateDTO))
+                .content(objectMapper.writeValueAsString(partProposalPostReqDTO))
                 .header("Authorization", tokenInfo.getGrantType() + " " + tokenInfo.getAccessToken())
         );
 
@@ -85,19 +84,19 @@ public class NovelSectionControllerTest {
     @DisplayName("소설 섹션 생성 요청 미인증 사용자 테스트")
     void confirmNovelSectionUser() throws Exception {
         // given
-        NovelSectionCreateDTO novelSectionCreateDTO = NovelSectionMother.createDto();
+        PartProposalPostReqDTO partProposalPostReqDTO = NovelSectionMother.createDto();
 
         // when
         ResultActions resultAction1 = mockMvc.perform(MockMvcRequestBuilders
                 .post("/api/section/{novelId}", novel.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(novelSectionCreateDTO))
+                .content(objectMapper.writeValueAsString(partProposalPostReqDTO))
                 .header("Authorization", tokenInfo.getGrantType() + " " + tokenInfo.getAccessToken() + "0")
         );
         ResultActions resultAction2 = mockMvc.perform(MockMvcRequestBuilders
                 .post("/api/section/{novelId}", novel.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(novelSectionCreateDTO))
+                .content(objectMapper.writeValueAsString(partProposalPostReqDTO))
                 .header("Authorization", tokenInfo.getGrantType() + " " + tokenInfo.getAccessToken())
         );
 
@@ -110,11 +109,11 @@ public class NovelSectionControllerTest {
     @DisplayName("소설 섹션 생성 요청 바디 검증 테스트")
     void confirmNovelSectionRequestBody() throws Exception {
         // given
-        NovelSectionCreateDTO sectionCreateDTO1 = NovelSectionCreateDTO.builder()
+        PartProposalPostReqDTO sectionCreateDTO1 = PartProposalPostReqDTO.builder()
                 .content("")
                 .part(1)
                 .build();
-        NovelSectionCreateDTO sectionCreateDTO2 = NovelSectionCreateDTO.builder()
+        PartProposalPostReqDTO sectionCreateDTO2 = PartProposalPostReqDTO.builder()
                 .content("TTTTTTTTTTTTTTTTTEEEEEEEEEEEESSSSSSSSSSSSSSSTTTTTTTTTT")
                 .part(null)
                 .build();
@@ -143,14 +142,14 @@ public class NovelSectionControllerTest {
     @DisplayName("소설 섹션 투표 요청 컨트롤러 테스트")
     protected void voteNovelSection1() throws Exception {
         // given
-        NovelSectionCreateDTO novelSectionCreateDTO = NovelSectionMother.createDto();
-        novelSectionService.createNovelSection(novel.getId(), member.getId(), novelSectionCreateDTO);
-        List<NovelSection> novelSections = novelSectionRepository.findNovelSectionsByNovel(novel).get();
-        NovelSection novelSection = novelSections.get(0);
+        PartProposalPostReqDTO partProposalPostReqDTO = NovelSectionMother.createDto();
+        partProposalService.createNovelSection(novel.getId(), member.getId(), partProposalPostReqDTO);
+        List<PartProposal> partProposals = partProposalRepository.findNovelSectionsByNovel(novel).get();
+        PartProposal partProposal = partProposals.get(0);
 
         // when
         ResultActions resultAction = mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/section/vote/{novelSectionId}", novelSection.getId())
+                .post("/api/section/vote/{novelSectionId}", partProposal.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", tokenInfo.getGrantType() + " " + tokenInfo.getAccessToken())
         );
@@ -163,19 +162,19 @@ public class NovelSectionControllerTest {
     @DisplayName("소설 섹션 중복 투표 테스트")
     protected void voteNovelSection2() throws Exception {
         // given
-        NovelSectionCreateDTO novelSectionCreateDTO = NovelSectionMother.createDto();
-        novelSectionService.createNovelSection(novel.getId(), member.getId(), novelSectionCreateDTO);
-        List<NovelSection> novelSections = novelSectionRepository.findNovelSectionsByNovel(novel).get();
-        NovelSection novelSection = novelSections.get(0);
+        PartProposalPostReqDTO partProposalPostReqDTO = NovelSectionMother.createDto();
+        partProposalService.createNovelSection(novel.getId(), member.getId(), partProposalPostReqDTO);
+        List<PartProposal> partProposals = partProposalRepository.findNovelSectionsByNovel(novel).get();
+        PartProposal partProposal = partProposals.get(0);
 
         // when
         ResultActions resultAction1 = mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/section/vote/{novelSectionId}", novelSection.getId())
+                .post("/api/section/vote/{novelSectionId}", partProposal.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", tokenInfo.getGrantType() + " " + tokenInfo.getAccessToken())
         );
         ResultActions resultAction2 = mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/section/vote/{novelSectionId}", novelSection.getId())
+                .post("/api/section/vote/{novelSectionId}", partProposal.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", tokenInfo.getGrantType() + " " + tokenInfo.getAccessToken())
         );

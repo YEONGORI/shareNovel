@@ -1,16 +1,21 @@
-package novel.server.novelversion;
+package novel.server.part;
 
 import jakarta.persistence.*;
 import novel.server.novel.Novel;
+import novel.server.partproposal.PartProposal;
 
 @Entity
-public class NovelVersion {
+public class Part {
     @Id
     @GeneratedValue
     private Long id;
+
     private String content;
-    private int version;
+
     @ManyToOne
     @JoinColumn(name = "novel_id")
     private Novel novel;
+
+    @OneToOne
+    private PartProposal selectedProposal;
 }

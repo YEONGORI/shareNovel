@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import novel.server.novel.Novel;
+import novel.server.novel.NovelStatus;
 
 import java.time.LocalDateTime;
 
@@ -19,6 +20,7 @@ public class NovelDTO {
     private String characters;
     private String background;
     private String event;
+    private NovelStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -30,6 +32,7 @@ public class NovelDTO {
                 .characters(novel.getCharacters())
                 .background(novel.getBackground())
                 .event(novel.getEvent())
+                .status(novel.getStatus())
                 .createdAt(novel.getCreatedAt())
                 .updatedAt(novel.getUpdatedAt())
                 .build();

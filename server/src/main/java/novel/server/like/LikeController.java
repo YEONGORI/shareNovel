@@ -1,4 +1,4 @@
-package novel.server.vote;
+package novel.server.like;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/vote")
 @RequiredArgsConstructor
-public class VoteController {
-    private final VoteService voteService;
+public class LikeController {
+    private final LikeService likeService;
 
     @PostMapping
     public ResponseEntity<?> voteForNovelSection(
@@ -21,7 +21,7 @@ public class VoteController {
             HttpServletResponse response
     ) {
         Long memberId = getMemberId();
-        voteService.voteForNovelSection(memberId, novelSectionId);
+        likeService.voteForNovelSection(memberId, novelSectionId);
         return makeResponseEntity("ok", HttpStatus.ACCEPTED);
     }
 

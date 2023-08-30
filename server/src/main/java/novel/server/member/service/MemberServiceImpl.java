@@ -39,7 +39,7 @@ public class MemberServiceImpl implements MemberService {
                 .penName(registerDto.getPenName())
                 .member(savedMember)
                 .writerNovels(new ArrayList<>())
-                .novelSections(new ArrayList<>())
+                .partProposals(new ArrayList<>())
                 .build();
         writerRepository.save(savedWriter);
         savedMember.setWriter(savedWriter);

@@ -1,31 +1,28 @@
-package novel.server.novelsection.dto;
+package novel.server.partproposal.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
-import novel.server.novelsection.NovelSection;
+import novel.server.part.Part;
+import novel.server.partproposal.PartProposal;
 import org.hibernate.validator.constraints.Length;
-
-import java.util.ArrayList;
 
 @Getter
 @Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class NovelSectionCreateDTO {
+public class PartProposalPostReqDTO {
     @NotBlank
     @Length(max = 5000)
     private String content;
 
     @NotNull
-    @Max(5000)
-    private Integer part;
+    private Part part;
 
-    public NovelSection toEntity() {
-        return NovelSection.builder()
+    public PartProposal toEntity() {
+        return PartProposal.builder()
                 .content(content)
                 .part(part)
-                .votes(new ArrayList<>())
                 .build();
     }
 }

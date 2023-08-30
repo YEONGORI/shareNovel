@@ -3,6 +3,7 @@ package novel.server.novel.dto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import novel.server.novel.Novel;
+import novel.server.novel.NovelStatus;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
@@ -45,7 +46,8 @@ public class NovelRegisterDTO {
                 .characters(characters)
                 .background(background)
                 .event(event)
-                .novelSections(new ArrayList<>())
+                .status(NovelStatus.ONGOING)
+                .partProposals(new ArrayList<>())
                 .writerNovels(new ArrayList<>())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
