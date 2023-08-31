@@ -21,7 +21,7 @@ public class LikeController {
             HttpServletResponse response
     ) {
         Long memberId = getMemberId();
-        likeService.voteForNovelSection(memberId, novelSectionId);
+        likeService.likeForPartProposal(memberId, novelSectionId);
         return makeResponseEntity("ok", HttpStatus.ACCEPTED);
     }
 

@@ -4,5 +4,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface LikeService {
-    void voteForNovelSection(Long memberId, Long novelSectionId);
+    void likeForPartProposal(Long memberId, Long novelSectionId);
 }

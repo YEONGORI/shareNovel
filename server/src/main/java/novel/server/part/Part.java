@@ -1,21 +1,44 @@
 package novel.server.part;
 
 import jakarta.persistence.*;
+import lombok.*;
+import novel.server.like.Like;
 import novel.server.novel.Novel;
-import novel.server.partproposal.PartProposal;
+import novel.server.part2.Part2;
+import novel.server.writer.Writer;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Part {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private Integer partNum;
+
+    @Column(columnDefinition = "TEXT")
     private String content;
 
+    @Setter
     @ManyToOne
-    @JoinColumn(name = "novel_id")
+    @JoinColumn(name = "novel_id", nullable = false)
     private Novel novel;
 
-    @OneToOne
-    private PartProposal selectedProposal;
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "member_id", nullable = false)
+    private Writer writer;
+
+    @OneToMany(mappedBy = "partProposal", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likes = new ArrayList<>();
+
+    public void updatePartContent(String content) {
+        this.content = content;
+    }
 }

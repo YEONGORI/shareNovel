@@ -5,10 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import novel.server.partproposal.PartProposal;
+import novel.server.part.Part;
 import novel.server.writer.Writer;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -26,5 +24,5 @@ public class Like {
 
     @ManyToOne
     @JoinColumn(name = "part_proposal_id")
-    private PartProposal partProposal;
+    private Part part;
 }

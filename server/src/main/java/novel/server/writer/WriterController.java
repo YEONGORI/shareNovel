@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@Slf4j
 @ResponseBody
 @RestController
 @RequestMapping("/api/writer")
@@ -20,5 +19,4 @@ public class WriterController {
     private <T> ResponseEntity<T> makeReponseEntity(T responseBody, HttpStatus statusCode) {
         return new ResponseEntity<>(responseBody, statusCode);
     }
-
 }
