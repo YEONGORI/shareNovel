@@ -3,7 +3,6 @@ package novel.server.novel;
 import jakarta.persistence.*;
 import lombok.*;
 import novel.server.part.Part;
-import novel.server.part2.Part2;
 import novel.server.stake.Stake;
 import novel.server.writernovel.WriterNovel;
 

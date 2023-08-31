@@ -31,17 +31,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
-public class Part2ProposalControllerTest {
+public class PartControllerTest {
     @Autowired
     PartService partService;
+
     @Autowired
     MemberService memberService;
+
     @Autowired
     NovelService novelService;
+
     @Autowired
     PartRepository partRepository;
+
     @Autowired
     ObjectMapper objectMapper;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -110,11 +115,9 @@ public class Part2ProposalControllerTest {
     void confirmNovelSectionRequestBody() throws Exception {
         // given
         PartCreateReqDTO sectionCreateDTO1 = PartCreateReqDTO.builder()
-                .partNum(0)
                 .content("")
                 .build();
         PartCreateReqDTO sectionCreateDTO2 = PartCreateReqDTO.builder()
-                .partNum(1)
                 .content("TTTTTTTTTTTTTTTTTEEEEEEEEEEEESSSSSSSSSSSSSSSTTTTTTTTTT")
                 .build();
 

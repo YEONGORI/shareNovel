@@ -2,7 +2,6 @@ package novel.server.part.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
-import novel.server.part2.Part2;
 import novel.server.part.Part;
 import org.hibernate.validator.constraints.Length;
 

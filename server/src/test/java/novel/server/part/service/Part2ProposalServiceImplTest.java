@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
-class Part2ProposalServiceImplTest {
+class PartServiceImplTest {
     @Autowired
     NovelService novelService;
     @Autowired

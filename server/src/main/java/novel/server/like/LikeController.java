@@ -1,6 +1,5 @@
 package novel.server.like;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import novel.server.member.dto.CustomUser;
 import org.springframework.http.HttpStatus;
@@ -10,19 +9,27 @@ import org.springframework.web.bind.annotation.*;
 
 @ResponseBody
 @RestController
-@RequestMapping("/api/vote")
+@RequestMapping("/api/like")
 @RequiredArgsConstructor
 public class LikeController {
     private final LikeService likeService;
 
-    @PostMapping
-    public ResponseEntity<?> voteForNovelSection(
-            @PathVariable Long novelSectionId,
-            HttpServletResponse response
+    @PostMapping("/{partId}")
+    public ResponseEntity<?> likeForPart(
+            @PathVariable Long partId
     ) {
         Long memberId = getMemberId();
-        likeService.likeForPartProposal(memberId, novelSectionId);
-        return makeResponseEntity("ok", HttpStatus.ACCEPTED);
+        likeService.likeForPart(memberId, partId);
+        return makeResponseEntity("OK", HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("/{partId}")
+    public ResponseEntity<?> cancelLikeForPart(
+            @PathVariable Long partId
+    ) {
+        Long memberId = getMemberId();
+        likeService.cancelLikeForPart(memberId, partId);
+        return makeResponseEntity("OK", HttpStatus.ACCEPTED);
     }
 
     private static Long getMemberId() {

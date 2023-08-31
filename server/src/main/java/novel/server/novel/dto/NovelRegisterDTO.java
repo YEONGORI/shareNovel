@@ -47,7 +47,7 @@ public class NovelRegisterDTO {
                 .background(background)
                 .event(event)
                 .status(NovelStatus.ONGOING)
-                .partProposals(new ArrayList<>())
+                .parts(new ArrayList<>())
                 .writerNovels(new ArrayList<>())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())

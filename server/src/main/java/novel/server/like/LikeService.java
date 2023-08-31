@@ -4,5 +4,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface LikeService {
-    void likeForPartProposal(Long memberId, Long novelSectionId);
+    void likeForPart(Long memberId, Long partId);
+
+    void cancelLikeForPart(Long memberId, Long partId);
 }
