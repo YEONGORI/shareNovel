@@ -3,7 +3,6 @@ package novel.server.part.exception;
 import lombok.extern.slf4j.Slf4j;
 import novel.server.global.ErrorResult;
 import novel.server.global.ResultCode;
-import novel.server.like.exception.DuplicatedLikeException;
 import novel.server.member.exception.MemberNotExistsException;
 import novel.server.novel.exception.NovelNotExistsException;
 import novel.server.part.PartController;
@@ -62,11 +61,4 @@ public class PartControllerAdvice {
         log.error("Jwt Exception Handler = ", e);
         return new ErrorResult(ResultCode.ERROR, singletonList(e.getMessage()));
     }
-    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    @ExceptionHandler(DuplicatedLikeException.class)
-    protected ErrorResult voteExHandle(DuplicatedLikeException e) {
-        log.error("Vote Exception Handler = ", e);
-        return new ErrorResult(ResultCode.ERROR, singletonList(e.getMessage()));
-    }
-
 }

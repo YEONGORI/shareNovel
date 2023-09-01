@@ -16,10 +16,10 @@ public class NovelMother {
                 .charset(StandardCharsets.UTF_8)
                 .randomize(named("title").and(ofType(String.class)), new StringRandomizer(100))
                 .randomize(named("plot").and(ofType(String.class)), new StringRandomizer(500))
-                .randomize(named("theme").and(ofType(String.class)), new StringRandomizer(400))
+                .randomize(named("theme").and(ofType(String.class)), new StringRandomizer(500))
                 .randomize(named("characters").and(ofType(String.class)), new StringRandomizer(100))
                 .randomize(named("background").and(ofType(String.class)), new StringRandomizer(100))
-                .randomize(named("event").and(ofType(String.class)), new StringRandomizer(100))
+                .randomize(named("event").and(ofType(String.class)), new StringRandomizer(200))
                 .randomize(named("penName").and(ofType(String.class)), new StringRandomizer(30));
 
         EasyRandom easyRandom = new EasyRandom(randomParameters);
@@ -32,8 +32,8 @@ public class NovelMother {
         EasyRandomParameters randomParameters = new EasyRandomParameters()
                 .charset(StandardCharsets.UTF_8)
                 .randomize(named("title").and(ofType(String.class)), new StringRandomizer(100))
-                .randomize(named("plot").and(ofType(String.class)), new StringRandomizer(1000))
-                .randomize(named("theme").and(ofType(String.class)), new StringRandomizer(500))
+                .randomize(named("plot").and(ofType(String.class)), new StringRandomizer(500))
+                .randomize(named("theme").and(ofType(String.class)), new StringRandomizer(400))
                 .randomize(named("characters").and(ofType(String.class)), new StringRandomizer(100))
                 .randomize(named("background").and(ofType(String.class)), new StringRandomizer(100))
                 .randomize(named("event").and(ofType(String.class)), new StringRandomizer(100));

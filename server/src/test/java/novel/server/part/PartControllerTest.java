@@ -23,8 +23,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -71,11 +69,11 @@ public class PartControllerTest {
     @DisplayName("소설 섹션 생성 컨트롤러 테스트")
     void createNovelSection() throws Exception {
         // given
-        PartCreateReqDTO partCreateReqDTO = NovelSectionMother.createDto();
+        PartCreateReqDTO partCreateReqDTO = PartMother.createDto();
 
         // when
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/section/{novelId}", novel.getId())
+                .post("/api/part/{novelId}", novel.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(partCreateReqDTO))
                 .header("Authorization", tokenInfo.getGrantType() + " " + tokenInfo.getAccessToken())
@@ -89,17 +87,17 @@ public class PartControllerTest {
     @DisplayName("소설 섹션 생성 요청 미인증 사용자 테스트")
     void confirmNovelSectionUser() throws Exception {
         // given
-        PartCreateReqDTO partCreateReqDTO = NovelSectionMother.createDto();
+        PartCreateReqDTO partCreateReqDTO = PartMother.createDto();
 
         // when
         ResultActions resultAction1 = mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/section/{novelId}", novel.getId())
+                .post("/api/part/{novelId}", novel.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(partCreateReqDTO))
                 .header("Authorization", tokenInfo.getGrantType() + " " + tokenInfo.getAccessToken() + "0")
         );
         ResultActions resultAction2 = mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/section/{novelId}", novel.getId())
+                .post("/api/part/{novelId}", novel.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(partCreateReqDTO))
                 .header("Authorization", tokenInfo.getGrantType() + " " + tokenInfo.getAccessToken())
@@ -124,13 +122,13 @@ public class PartControllerTest {
 
         // when
         ResultActions resultAction1 = mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/section/{novelId}", novel.getId())
+                .post("/api/part/{novelId}", novel.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(sectionCreateDTO1))
                 .header("Authorization", tokenInfo.getGrantType() + " " + tokenInfo.getAccessToken() + "0")
         );
         ResultActions resultAction2 = mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/section/{novelId}", novel.getId())
+                .post("/api/part/{novelId}", novel.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(sectionCreateDTO2))
                 .header("Authorization", tokenInfo.getGrantType() + " " + tokenInfo.getAccessToken())
@@ -138,52 +136,6 @@ public class PartControllerTest {
 
         // then
         resultAction1.andExpect(status().isMethodNotAllowed());
-        resultAction2.andExpect(status().isMethodNotAllowed());
-    }
-
-    @Test
-    @DisplayName("소설 섹션 투표 요청 컨트롤러 테스트")
-    protected void voteNovelSection1() throws Exception {
-        // given
-        PartCreateReqDTO partCreateReqDTO = NovelSectionMother.createDto();
-        partService.createNovelSection(novel.getId(), member.getId(), partCreateReqDTO);
-        List<Part> parts = partRepository.findPartsByNovel(novel).get();
-        Part part = parts.get(0);
-
-        // when
-        ResultActions resultAction = mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/section/vote/{novelSectionId}", part.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", tokenInfo.getGrantType() + " " + tokenInfo.getAccessToken())
-        );
-
-        // then
-        resultAction.andExpect(status().isAccepted());
-    }
-
-    @Test
-    @DisplayName("소설 섹션 중복 투표 테스트")
-    protected void voteNovelSection2() throws Exception {
-        // given
-        PartCreateReqDTO partCreateReqDTO = NovelSectionMother.createDto();
-        partService.createNovelSection(novel.getId(), member.getId(), partCreateReqDTO);
-        List<Part> parts = partRepository.findPartsByNovel(novel).get();
-        Part part = parts.get(0);
-
-        // when
-        ResultActions resultAction1 = mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/section/vote/{novelSectionId}", part.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", tokenInfo.getGrantType() + " " + tokenInfo.getAccessToken())
-        );
-        ResultActions resultAction2 = mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/section/vote/{novelSectionId}", part.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", tokenInfo.getGrantType() + " " + tokenInfo.getAccessToken())
-        );
-
-        // then
-        resultAction1.andExpect(status().isAccepted());
-        resultAction2.andExpect(status().isMethodNotAllowed());
+        resultAction2.andExpect(status().isCreated());
     }
 }

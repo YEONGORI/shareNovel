@@ -1,18 +1,17 @@
 package novel.server.like;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import novel.server.part.Part;
 import novel.server.writer.Writer;
 
 @Entity
 @Getter
 @Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "likes")
 public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +21,8 @@ public class Like {
     @JoinColumn(name = "writer_id")
     private Writer writer;
 
+
     @ManyToOne
-    @JoinColumn(name = "part_proposal_id")
+    @JoinColumn(name = "part_id")
     private Part part;
 }

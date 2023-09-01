@@ -54,5 +54,6 @@ public class LikeServiceImpl implements LikeService {
                 .orElseThrow(() -> new AlreadyCanceledException("이미 취소하셨습니다."));
 
         part.getLikes().remove(like);
+        likeRepository.delete(like);
     }
 }

@@ -18,21 +18,27 @@ public class NovelRegisterDTO {
     @NotBlank
     @Length(max = 100)
     private String title;
+
     @NotBlank
     @Length(max = 500)
     private String plot;
+
     @NotBlank
     @Length(max = 500)
     private String theme;
+
     @NotBlank
     @Length(max = 100)
     private String characters;
+
     @NotBlank
     @Length(max = 100)
     private String background;
+
     @NotBlank
     @Length(max = 200)
     private String event;
+
     @Setter
     @NotBlank
     @Length(max = 30)
@@ -47,6 +53,7 @@ public class NovelRegisterDTO {
                 .background(background)
                 .event(event)
                 .status(NovelStatus.ONGOING)
+                .stakes(new ArrayList<>())
                 .parts(new ArrayList<>())
                 .writerNovels(new ArrayList<>())
                 .createdAt(LocalDateTime.now())

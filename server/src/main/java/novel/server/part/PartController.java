@@ -5,7 +5,6 @@ import novel.server.member.dto.CustomUser;
 import novel.server.part.dto.PartUpdateReqDTO;
 import novel.server.part.dto.PartCreateReqDTO;
 import novel.server.part.dto.PartResDTO;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
